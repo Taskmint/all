@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        .form-container {
+            width: 100%;
+            height: 600px;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Logo Styling */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .logo {
+            font-size: 30px;
+            font-weight: bold;
+            color: black;
+        }
+        .logo span {
+            font-size: 14px;
+            font-weight: normal;
+            color: #ff9800;
+        }
+        .span2 {
+            font-size: 14px;
+            font-weight: normal;
+            color: #ff9800;
+        }
+
+        /* Thank You Message - Top Left */
+        .thank-you-message {
+            display: none;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: #ffffff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            font-weight: bold;
+            color: green;
+            width: 50%;
+        }
+        .thank-you-message a {
+            color: blue;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Logo -->
+   
+    <div class="logo-container">
+     
+        <div class="logo">Task<span class="span2">Mint</span></div>
+    </div>
+
+    <div class="container">
+        <h2>Fill Out the Form</h2>
+        <div class="form-container">
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdB5NcFiZuig98Z597-0F1wzX8NQ-EDZmJCbCLtwy_dDWiTOw/viewform?embedded=true"></iframe>
+        </div>
+    </div>
+
+    <!-- Thank You Message - Fixed Top Left -->
+   
+
+   
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Authentication</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Prevent overflow on smaller screens */
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.4); /* Glassy effect */
+            padding: 30px;
+            width: 100%;
+            max-width: 450px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #fff;
+            font-size: 24px;
+        }
+
+        input {
+            padding: 12px;
+            width: 80%;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.6);
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 12px 25px;
+            width: 80%;
+            margin-top: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .google-btn {
+            padding: 12px 29px;
+            width: 80%;
+            background: #db4437;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-sizing: border-box;
+        }
+        .btn{
+            padding: 12px 25px;
+            width: 80%;
+            background: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-sizing: border-box;
+        }
+
+        .google-btn:hover {
+            background: #c1351d;
+        }
+
+        p {
+            color: #fff;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .span1 {
+    font-size: 14px;
+    font-weight: normal;
+    color: #ff9800;
+}
+
+        /* Mobile devices (Android and small screens) */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                width: 90%;
+                max-width: 400px;
+            }
+            h1 {
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+            input, button, .google-btn {
+                width: 100%;
+                font-size: 14px;
+            }
+            p {
+                font-size: 12px;
+            }
+        }
+
+        /* Tablets and Small Laptops (Portrait & Landscape) */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                width: 85%;
+                max-width: 500px;
+            }
+            h1 {
+                font-size: 22px;
+                margin-bottom: 25px;
+            }
+            input, button, .google-btn {
+                width: 90%;
+                font-size: 15px;
+            }
+        }
+
+        /* Desktop and Larger Screens (PCs and Laptops) */
+        @media (min-width: 1024px) {
+            body {
+                justify-content: center;
+                align-items: center;
+            }
+
+            .container {
+                padding: 40px;
+                max-width: 600px;
+                width: 40%;
+            }
+
+            h1 {
+                font-size: 26px;
+                margin-bottom: 30px;
+            }
+
+            input, button, .google-btn {
+                width: 90%;
+                font-size: 16px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Task<span class="span1">Mint</span></h1>
+        <input type="email" id="email" placeholder="Enter your email" />
+        <button id="sendLinkButton">📩 Send Sign-In Link</button>
+        <p id="message"></p>
+        <p>Or sign up with:</p>
+        <button class="google-btn" id="googleSignUpButton">🔑 Sign Up with Google</button>
+        <button class="btn" onclick="redirectToPage()">➤Sign Up with Email and Password !</button>
+    </div>
+    <script>function redirectToPage() {
+        window.location.href = "emailandpasswordsignup.html";  // Replace with your desired URL
+    }</script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink, createUserWithEmailAndPassword, sendEmailVerification, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+
+        
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyCpoMclgXGuDxb1muQ-4eP-_MB3ZdRd4DE",
+            authDomain: "taskmint-237c0.firebaseapp.com",
+            projectId: "taskmint-237c0",
+            storageBucket: "taskmint-237c0.firebasestorage.app",
+            messagingSenderId: "180156821472",
+            appId: "1:180156821472:web:c8cc6c91835be05091c585",
+            measurementId: "G-880TPF7J3L"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+
+        // Send the sign-in email link
+        function sendSignInLink() {
+            const email = document.getElementById('email').value.trim();
+            const messageElement = document.getElementById('message');
+
+            if (!email) {
+                messageElement.textContent = "Please enter a valid email address.";
+                return;
+            }
+
+            const actionCodeSettings = {
+                url: 'https://taskmint-237c0.web.app/finishSignUp',
+                handleCodeInApp: true,
+            };
+
+            sendSignInLinkToEmail(auth, email, actionCodeSettings)
+                .then(() => {
+                    window.localStorage.setItem('emailForSignIn', email);
+                    messageElement.textContent = "Check your email for the sign-in link!";
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    if (errorCode === 'auth/quota-exceeded') {
+                        messageElement.textContent = "";
+                        fallbackToEmailPasswordSignup(email);
+                    } else {
+                        messageElement.textContent = "Error: " + errorMessage;
+                    }
+                });
+        }
+
+        // Fallback to Email/Password Signup
+        function fallbackToEmailPasswordSignup(email) {
+            const messageElement = document.getElementById('message');
+            const password = "tempPassword123"; // Generate or use a custom password
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    sendEmailVerification(userCredential.user)
+                        .then(() => {
+                            messageElement.textContent = "Email created and verification sent. Please check your email.";
+                        })
+                        .catch((error) => {
+                            messageElement.textContent = "Error: " + error.message;
+                        });
+                })
+                .catch((error) => {
+                    messageElement.textContent = "Error: " + error.message;
+                });
+        }
+
+        // Handle the email link and sign in the user
+        const emailForSignIn = window.localStorage.getItem('emailForSignIn');
+        if (isSignInWithEmailLink(auth, window.location.href)) {
+            signInWithEmailLink(auth, emailForSignIn, window.location.href)
+                .then((result) => {
+                    window.localStorage.removeItem('emailForSignIn');
+                    logEvent(analytics, 'sign_in_with_email_link');
+                    alert("Signed in successfully!");
+                })
+                .catch((error) => {
+                    alert("Error signing in: " + error.message);
+                });
+        }
+
+        // Google Sign-In
+        const provider = new GoogleAuthProvider();
+        document.getElementById('googleSignUpButton').addEventListener('click', () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    const user = result.user;
+                    logEvent(analytics, 'google_sign_in');
+                    alert("Signed up with Google!");
+                })
+                .catch((error) => {
+                    console.error(error.code, error.message);
+                    alert("Error signing in with Google: " + error.message);
+                });
+        });
+
+     
+        // Bind the sendSignInLink function to the button click event
+        document.getElementById('sendLinkButton').addEventListener('click', sendSignInLink);
+    </script>
+
+</body>
+</html>

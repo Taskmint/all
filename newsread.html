@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Earn</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .news-card {
+            height: 150px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+        .news-card:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        .ad-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            font-size: 20px;
+            display: none;
+        }
+        .paid{
+            color: goldenrod;
+        }
+    </style>
+    <script>
+        function showAdAndRedirect(url) {
+            const adOverlay = document.getElementById("ad-overlay");
+            adOverlay.style.display = "flex";
+            let countdown = 5;
+            const interval = setInterval(() => {
+                document.getElementById("ad-timer").innerText = `Please wait... ${countdown} seconds`;
+                countdown--;
+                if (countdown < 0) {
+                    clearInterval(interval);
+                    window.location.href = url;
+                }
+            }, 1000);
+        }
+    </script>
+        <script src="lastvisitedpage.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <h1>Read News & Earn Rewards!</h1>
+        <h2 style="text-align: center;">Latest News</h2>
+        <div class="grid">
+            <!-- News Cards -->
+            <script>
+                for (let i = 1; i <= 30; i++) {
+                    document.write(`<div class='news-card'>Loading...</div>`);
+                }
+            </script>
+        </div>
+        
+        <script>
+            async function loadNews() {
+                try {
+                    const response = await fetch("https://api.currentsapi.services/v1/latest-news?apiKey=HpEw6I54u3aiR01HPX6VXHTFfpz7niY_WV68Adpb2OfqeXxG");
+                    const data = await response.json();
+        
+                    if (!data.news || data.news.length === 0) {
+                        document.querySelectorAll(".news-card").forEach(card => {
+                            card.innerText = "No news available.";
+                        });
+                        return;
+                    }
+        
+                    // Shuffle news articles randomly
+                    const shuffledNews = data.news.sort(() => 0.5 - Math.random());
+        
+                    // Get all .news-card elements
+                    const newsCards = document.querySelectorAll(".news-card");
+        
+                    // Assign random news headlines to each news card
+                    newsCards.forEach((card, index) => {
+                        if (shuffledNews[index]) {
+                            card.innerHTML = `<div>${shuffledNews[index].title}<br><div class="paid">Enter & get paid💲</div></div>`;
+                        } else {
+                            card.innerText = "No more news.";
+                        }
+                    });
+        
+                } catch (error) {
+                    document.querySelectorAll(".news-card").forEach(card => {
+                        card.innerText = "Failed to load news.";
+                    });
+                }
+            }
+        
+            loadNews();
+        
+            // Refresh news every 10 seconds with new random articles
+        </script>
+        
+        
+        <p id="status"></p> <!-- Status message display -->
+        
+        
+
+    <script>
+        // Select all elements with class 'news-card'
+        let newsCards = document.querySelectorAll(".news-card");
+    
+        newsCards.forEach(card => {
+            card.addEventListener("click", function() {
+                document.getElementById("status").innerText = "Loading ad...";
+    
+                if (typeof window.interstitialAd !== "undefined") {
+                    window.interstitialAd.show({
+                        onComplete: function() {
+                            document.getElementById("status").innerText = "Ad complete. Redirecting...";
+                            setTimeout(() => {
+                                window.location.href = "news.html"; // Redirect to news article
+                            }, 1000);
+                        },
+                        onError: function() {
+                            document.getElementById("status").innerText = "No ads available. Try again later.";
+                            window.location.href = "news.html"; // Redirect to news article
+
+                        }
+                    });
+                } else {
+                    document.getElementById("status").innerText = "Ad network not loaded. Redirecting...";
+                    window.location.href = "news.html"; // Redirect to news article
+
+                }
+            });
+        });
+    </script>
+    </body>
+</html>

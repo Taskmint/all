@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glassy Reward Cards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+    overflow-y: auto; /* Allow vertical scrolling */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    padding: 20px;
+    text-align: center;
+    scrollbar-width: none; /* Hide scrollbar in Firefox */
+}
+
+/* Hide scrollbar by default */
+body::-webkit-scrollbar {
+    width: 8px;
+    background: transparent; /* Fully hide the scrollbar when idle */
+}
+
+/* Show scrollbar while scrolling */
+body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5); /* Make it visible while scrolling */
+    border-radius: 10px;
+    transition: opacity 0.3s ease;
+}
+
+/* Initially hide scrollbar */
+body.scrolling::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+
+
+        .reward-button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            margin-bottom: 20px;
+            box-shadow: 0px 5px 15px rgba(255, 126, 95, 0.4);
+        }
+
+        .reward-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 10px 25px rgba(255, 126, 95, 0.6);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Auto-adjust grid columns */
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border-radius: 15px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .card:nth-child(1) {
+            background: linear-gradient(135deg, #FF7E5F, #FEB47B, #D4AF37); /* Gold gradient */
+        }
+
+        .card:nth-child(2) {
+            background: linear-gradient(135deg, #D2691E, #FF6347, #FF4500); /* Tomato shades */
+        }
+
+        .card:nth-child(3) {
+            background: linear-gradient(135deg, #32CD32, #98FB98, #00FF7F); /* Green shades */
+        }
+
+        .card:nth-child(4) {
+            background: linear-gradient(135deg, #4682B4, #5F9EA0, #B0C4DE); /* Blue shades */
+        }
+
+        .card:nth-child(5) {
+            background: linear-gradient(135deg, #800080, #DDA0DD, #EE82EE); /* Purple shades */
+        }
+
+        .card:nth-child(6) {
+            background: linear-gradient(135deg, #FFD700, #F4A300, #FF8C00); /* Yellow to orange */
+        }
+
+        .card:nth-child(7) {
+            background: linear-gradient(135deg, #00FFFF, #40E0D0, #20B2AA); /* Cyan shades */
+        }
+
+        .card:nth-child(8) {
+            background: linear-gradient(135deg, #FF1493, #FF69B4, #C71585); /* Pink shades */
+        }
+
+        .card:nth-child(9) {
+            background: linear-gradient(135deg, #F08080, #FF7F50, #FF6347); /* Coral shades */
+        }
+
+        .card:nth-child(10) {
+            background: linear-gradient(135deg, #A52A2A, #B22222, #8B0000); /* Red shades */
+        }
+
+        .card:nth-child(11) {
+            background: linear-gradient(135deg, #8B4513, #D2691E, #A52A2A); /* Brown shades */
+        }
+
+        .card:nth-child(12) {
+            background: linear-gradient(135deg, #1E90FF, #87CEEB, #4682B4); /* Sky blue shades */
+        }
+
+        .ads-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ads-container iframe {
+            width: 80%;
+            max-width: 600px;
+            height: 80%;
+            border-radius: 8px;
+            border: none;
+        }
+
+        /* Properly hide the reward card */
+        .reward-card {
+            display: none;
+            opacity: 0;
+            visibility: hidden;
+            width: 80%;
+            max-width: 600px;
+            height: 200px;
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            border-radius: 12px;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.2);
+            z-index: 1100;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+
+        /*ads*/
+        #status{
+            margin-top: 1%;
+            color: orange;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .reward-button {
+                font-size: 1rem;
+            }
+
+            .container {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .ads-container iframe {
+                width: 90%;
+                height: 60%;
+            }
+
+            .reward-card {
+                font-size: 1.5rem;
+                width: 90%;
+            }
+        }
+    </style>
+
+<script src="https://proads-code.com/rewarded-ad.js"></script>
+<script src="https://ads.google.com/adsense/rewarded.js"></script>
+<script src="https://unityads.com/sdk.js"></script>
+</head>
+<body>
+   
+    <button class="reward-button" id="rewardButton" onclick="startReward()">🎁 Get Your Reward </button>
+    <p id="status"></p>
+<p>Your Points: <span id="userPoints">0</span></p>
+    <div class="container" id="cardContainer">
+        <div class="card">$1 USD</div>
+        <div class="card">$5 USD</div>
+        <div class="card">$100 USD</div>
+        <div class="card">₹100 INR</div>
+        <div class="card">₹200 INR</div>
+        <div class="card">1000 Points</div>
+        <div class="card">10 Points</div>
+        <div class="card">0 Points</div>
+        <div class="card">$200 USD</div>
+        <div class="card">$1000 USD</div>
+        <div class="card">50 Points</div>
+        <div class="card">20 Points</div>
+    </div>
+
+   
+
+    <div class="reward-card" id="rewardCard">
+        <span id="rewardText"></span>
+    </div>
+
+    <script>
+        let clickCounter = 0; // Track the number of clicks
+
+        function startReward() {
+            if (clickCounter >= 5) { // Disable button after 5 clicks
+                document.getElementById("rewardButton").disabled = true;
+                document.getElementById("rewardButton").innerText = "You have already claimed your rewards!";
+                return;
+            }
+
+            clickCounter++; // Increment the click count
+
+            const cards = document.querySelectorAll(".card");
+            let selectedCard = null;
+            let counter = 0;
+            let interval = setInterval(() => {
+                cards.forEach(card => card.style.opacity = "0.5");
+                let randomIndex = Math.floor(Math.random() * cards.length);
+                cards[randomIndex].style.opacity = "1";
+                selectedCard = cards[randomIndex];
+                counter++;
+                if (counter > 10) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        showAd(selectedCard);
+                    }, 2000);
+                }
+            }, 300);
+        }
+
+        function showAd(selectedCard) {
+            const adsContainer = document.getElementById("adsContainer");
+            const adFrame = document.getElementById("adFrame");
+
+            adsContainer.style.display = "flex";
+            adFrame.src = "https://www.example.com/rewarded-ad"; 
+
+            setTimeout(() => {
+                adFrame.src = "about:blank";
+                adsContainer.style.display = "none";
+
+                setTimeout(() => {
+                    showRewardCard(selectedCard);
+                }, 2000);
+            }, 6000);
+        }
+
+        function showRewardCard(selectedCard) {
+            const rewardCard = document.getElementById("rewardCard");
+            const rewardText = document.getElementById("rewardText");
+
+            rewardText.innerText = `You won: ${selectedCard.innerText}`;
+            rewardCard.style.background = selectedCard.style.background;
+            
+            rewardCard.style.display = "flex";
+            setTimeout(() => {
+                rewardCard.style.opacity = "1";
+                rewardCard.style.visibility = "visible";
+            }, 50);
+
+            setTimeout(() => {
+                rewardCard.style.opacity = "0";
+                rewardCard.style.visibility = "hidden";
+                setTimeout(() => {
+                    rewardCard.style.display = "none";
+                }, 500);
+            }, 3000);
+        }
+
+        let scrollTimeout;
+
+document.addEventListener("scroll", () => {
+    document.body.classList.add("scrolling");
+
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        document.body.classList.remove("scrolling");
+    }, 1000); // Hide scrollbar 1 second after scrolling stops
+});
+
+
+
+/*ads manage*/
+
+<!-- Ad Network Scripts -->
+
+
+
+
+</script>
+
+<script>
+
+    let db;
+        let userPoints = 0;
+        let adNetwork = ""; // Auto-detect ad network
+    
+        function openDB() {
+            let request = indexedDB.open("SpinRewardDB", 1);
+    
+            request.onupgradeneeded = function(event) {
+                let db = event.target.result;
+                if (!db.objectStoreNames.contains("userData")) {
+                    db.createObjectStore("userData", { keyPath: "id" });
+                }
+            };
+    
+            request.onsuccess = function(event) {
+                db = event.target.result;
+                loadUserPoints();
+            };
+    
+            request.onerror = function(event) {
+                console.log("IndexedDB error:", event.target.error);
+            };
+        }
+    
+        function loadUserPoints() {
+            let transaction = db.transaction(["userData"], "readonly");
+            let store = transaction.objectStore("userData");
+            let request = store.get("userPoints");
+    
+            request.onsuccess = function() {
+                if (request.result) {
+                    userPoints = request.result.points;
+                    document.getElementById("userPoints").innerText = userPoints;
+                }
+            };
+        }
+    
+        function saveUserPoints() {
+            let transaction = db.transaction(["userData"], "readwrite");
+            let store = transaction.objectStore("userData");
+            store.put({ id: "userPoints", points: userPoints });
+        }
+    
+        document.getElementById("rewardButton").addEventListener("click", function() {
+            document.getElementById("status").innerText = "Spinning...";
+    
+            setTimeout(() => {
+                document.getElementById("status").innerText = "Spin Completed!";
+                
+                setTimeout(() => {
+                    showRewardedAd();
+                }, 2000);
+    
+            }, 2000);
+        });
+    
+        function detectAdNetwork() {
+            if (typeof google !== "undefined" && google.adsense) {
+                adNetwork = "AdSense";
+            } else if (typeof PBJS !== "undefined") {
+                adNetwork = "PropellerAds";
+            } else if (typeof unityAds !== "undefined") {
+                adNetwork = "UnityAds";
+            }
+        }
+    
+        function showRewardedAd() {
+            detectAdNetwork();
+    
+            if (adNetwork === "AdSense") {
+                document.getElementById("status").innerText = "Loading Google AdSense Ad...";
+                google.adsense.rewarded.onAdComplete = function() {
+                    giveReward();
+                };
+                google.adsense.rewarded.requestAd();
+            } 
+            else if (adNetwork === "PropellerAds") {
+                document.getElementById("status").innerText = "Loading PropellerAds Ad...";
+                PBJS.que.push(function() {
+                    PBJS.loadRewardedAd({
+                        onAdLoaded: function() {
+                            document.getElementById("status").innerText = "Ad Loaded. Watching now...";
+                            PBJS.showRewardedAd({
+                                onComplete: function() {
+                                    giveReward();
+                                },
+                                onError: function() {
+                                    document.getElementById("status").innerText = "Ad failed to load. Try again later.";
+                                }
+                            });
+                        },
+                        onError: function() {
+                            document.getElementById("status").innerText = "No ads available. Come back later.";
+                        }
+                    });
+                });
+            } 
+            else if (adNetwork === "UnityAds") {
+                document.getElementById("status").innerText = "Loading Unity Ads...";
+                unityAds.showRewardedAd({
+                    onComplete: function() {
+                        giveReward();
+                    },
+                    onError: function() {
+                        document.getElementById("status").innerText = "Ad failed to load.";
+                    }
+                });
+            } 
+            else {
+                document.getElementById("status").innerText = "No ads available right now. Try again later.";
+            }
+        }
+    
+        function giveReward() {
+            userPoints += 10;
+            document.getElementById("userPoints").innerText = userPoints;
+            saveUserPoints();
+            document.getElementById("status").innerText = "You earned 10 points!";
+        }
+    
+        openDB();
+    
+    
+    
+    </script>
+</body>
+</html>

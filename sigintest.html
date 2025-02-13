@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Passwordless Login</title>
+
+  <!-- Local Font -->
+  <style>
+    @font-face {
+      font-family: 'Poppins';
+      src: url('Poppins-Regular.ttf') format('truetype');
+    }
+
+    /* Global Styles */
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(to right, #8360c3, #2ebf91);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    /* Centered Login Container */
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    /* Input Field */
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    /* Button */
+    button {
+      background: #2ebf91;
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #1e8c69;
+    }
+
+    /* Message Box */
+    #message {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Passwordless Login</h1>
+    <p>Enter your email and we will send you a login link.</p>
+    
+    <input type="email" id="email" placeholder="Enter your email" required>
+    <button id="sendLinkBtn">Send Sign-In Link</button>
+
+    <p id="message"></p>
+  </div>
+
+  <!-- Firebase Authentication -->
+  <script type="module">
+    import { initializeApp } from "/node_modules/firebase/firebase-app.js";
+    import { getAuth, sendSignInLinkToEmail, signInWithEmailLink, isSignInWithEmailLink } from "/node_modules/firebase/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCpoMclgXGuDxb1muQ-4eP-_MB3ZdRd4DE",
+      authDomain: "taskmint-237c0.firebaseapp.com",
+      projectId: "taskmint-237c0",
+      storageBucket: "taskmint-237c0.appspot.com",
+      messagingSenderId: "180156821472",
+      appId: "1:180156821472:web:c8cc6c91835be05091c585",
+      measurementId: "G-880TPF7J3L"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Function to send sign-in link to email
+    async function sendSignInEmail() {
+      const email = document.getElementById("email").value;
+      const messageBox = document.getElementById("message");
+
+      if (!email) {
+        messageBox.innerText = "Please enter a valid email!";
+        messageBox.style.color = "red";
+        return;
+      }
+
+      const actionCodeSettings = {
+        url: window.location.href, // Redirect URL after login
+        handleCodeInApp: true,
+      };
+
+      try {
+        await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+        localStorage.setItem("emailForSignIn", email);
+        messageBox.innerText = "Sign-in link sent! Check your email.";
+        messageBox.style.color = "green";
+      } catch (error) {
+        messageBox.innerText = error.message;
+        messageBox.style.color = "red";
+      }
+    }
+
+    // Function to handle sign-in via email link
+    async function handleSignInWithEmailLink() {
+      if (isSignInWithEmailLink(auth, window.location.href)) {
+        let email = localStorage.getItem("emailForSignIn");
+        if (!email) {
+          email = prompt("Please enter your email for confirmation:");
+        }
+
+        try {
+          const result = await signInWithEmailLink(auth, email, window.location.href);
+          document.getElementById("message").innerText = `Login Successful! Welcome, ${result.user.email}`;
+          document.getElementById("message").style.color = "green";
+          localStorage.removeItem("emailForSignIn");
+        } catch (error) {
+          document.getElementById("message").innerText = error.message;
+          document.getElementById("message").style.color = "red";
+        }
+      }
+    }
+
+    // Check if the link is opened from email
+    window.onload = handleSignInWithEmailLink;
+
+    // Attach event listener to the button
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("sendLinkBtn").addEventListener("click", sendSignInEmail);
+    });
+  </script>
+</body>
+</html>

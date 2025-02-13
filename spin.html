@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin Wheel</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f8f8;
+            text-align: center;
+            position: relative;
+        }
+        /**/
+      /* Center the wheel and make it responsive */
+/* Center the wheel and make it responsive */
+.wheel-container {
+    position: relative;
+    width: 80vw;
+    max-width: 350px;
+    height: 80vw;
+    max-height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+}
+
+/* 3D Glassy Wheel */
+.wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 6px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        inset 0 0 12px rgba(255, 255, 255, 0.6),
+        0 6px 10px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(0, 150, 255, 0.6);
+    background: radial-gradient(circle at 50% 30%, #ffcc00, #ff5733, #ff1493, #8000ff);
+    transition: transform 4s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add a subtle highlight to enhance the 3D effect */
+.wheel::before {
+    content: "";
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.3), transparent);
+    z-index: 1;
+}
+
+/* Pointer with a glossy effect */
+.pointer {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 24px solid #ffeb3b;
+    filter: drop-shadow(0px 3px 5px rgba(0, 0, 0, 0.5));
+    z-index: 3;
+}
+
+/* Glassy and 3D Spin Button */
+.spin-btn {
+    margin-top: 20px;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #ff3b3b, #ff8000);
+    color: white;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        inset 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.spin-btn:hover {
+    background: linear-gradient(135deg, #ff8000, #ff3b3b);
+    transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .wheel-container {
+        width: 90vw;
+        height: 90vw;
+    }
+    .spin-btn {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+}
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3;
+        }
+        .ad-container {
+            width: 300px;
+            height: 250px;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            display: none;
+        }
+        .ad-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            background: #fff;
+            border: 2px solid #333;
+            border-radius: 5px;
+            display: none;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="wheel-container">
+        <div class="pointer"></div>
+        <canvas id="wheel" width="300" height="300"></canvas>
+    </div>
+    <button class="spin-btn" id="spinBtn" onclick="spinWheel()">Spin</button>
+   
+    <div class="result-box" id="result">Spin to Win!</div>
+    <p id="status"></p>
+    <p>Your Points: <span id="userPoints">0</span></p>
+
+    <script>
+        const canvas = document.getElementById("wheel");
+        const ctx = canvas.getContext("2d");
+        let segments = ["💲10 USD", "50 Coins", "100 Coins", "No Prize", "💲20 USD", "💲100 USD"];
+        const colors = ["#8e44ad", "#FFFF00", "gray", "green", "#FF00FF", "#FFA500"];
+        let angle = 0;
+        let spinning = false;
+        const resultBox = document.getElementById("result");
+        const overlay = document.getElementById("overlay");
+        const adContainer = document.getElementById("adContainer");
+
+        function randomizeSegments() {
+            segments = segments.sort(() => Math.random() - 0.5);
+        }
+
+        function drawWheel() {
+            const slice = (2 * Math.PI) / segments.length;
+            segments.forEach((text, i) => {
+                ctx.beginPath();
+                ctx.fillStyle = colors[i];
+                ctx.moveTo(150, 150);
+                ctx.arc(150, 150, 150, angle + i * slice, angle + (i + 1) * slice);
+                ctx.lineTo(150, 150);
+                ctx.fill();
+                ctx.save();
+                ctx.fillStyle = "black";
+                ctx.translate(150 + Math.cos(angle + (i + 0.5) * slice) * 100, 150 + Math.sin(angle + (i + 0.5) * slice) * 100);
+                ctx.rotate(angle + (i + 0.5) * slice);
+                ctx.fillText(text, -20, 0);
+                ctx.restore();
+            });
+        }
+        randomizeSegments();
+        drawWheel();
+
+        function spinWheel() {
+            if (spinning) return;
+            spinning = true;
+            randomizeSegments();
+            drawWheel();
+            let randomDegree = Math.floor(3600 + Math.random() * 360);
+            let spinTime = 5000;
+            let start = null;
+
+            function animate(timestamp) {
+                if (!start) start = timestamp;
+                let progress = timestamp - start;
+                let easeOut = Math.pow(1 - progress / spinTime, 3);
+                angle = (randomDegree * easeOut) * (Math.PI / 180);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawWheel();
+                if (progress < spinTime) {
+                    requestAnimationFrame(animate);
+                } else {
+                    spinning = false;
+                    showAd(randomDegree % 360);
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        function showAd(finalAngle) {
+            overlay.style.display = "flex";
+            adContainer.style.display = "block";
+            setTimeout(() => {
+                overlay.style.display = "none";
+                displayResult(finalAngle);
+            }, 5000);
+        }
+
+        function displayResult(finalAngle) {
+            const slice = 360 / segments.length;
+            const index = Math.floor((360 - finalAngle) / slice) % segments.length;
+            resultBox.textContent = "You won: " + segments[index] + "!";
+            resultBox.style.display = "block";
+        }
+
+
+
+        /*ad manage*/
+      
+
+        let db;
+        let userPoints = 0;
+        let adNetwork = ""; // Auto-detect ad network
+
+        function openDB() {
+            let request = indexedDB.open("SpinRewardDB", 1);
+
+            request.onupgradeneeded = function(event) {
+                let db = event.target.result;
+                if (!db.objectStoreNames.contains("userData")) {
+                    db.createObjectStore("userData", { keyPath: "id" });
+                }
+            };
+
+            request.onsuccess = function(event) {
+                db = event.target.result;
+                loadUserPoints();
+            };
+
+            request.onerror = function(event) {
+                console.log("IndexedDB error:", event.target.error);
+            };
+        }
+
+        function loadUserPoints() {
+            let transaction = db.transaction(["userData"], "readonly");
+            let store = transaction.objectStore("userData");
+            let request = store.get("userPoints");
+
+            request.onsuccess = function() {
+                if (request.result) {
+                    userPoints = request.result.points;
+                    document.getElementById("userPoints").innerText = userPoints;
+                }
+            };
+        }
+
+        function saveUserPoints() {
+            let transaction = db.transaction(["userData"], "readwrite");
+            let store = transaction.objectStore("userData");
+            store.put({ id: "userPoints", points: userPoints });
+        }
+
+        document.getElementById("spinBtn").addEventListener("click", function() {
+            document.getElementById("status").innerText = "Spinning...";
+
+            setTimeout(() => {
+                document.getElementById("status").innerText = "Spin Completed!";
+                
+                setTimeout(() => {
+                    showRewardedAd();
+                }, 2000);
+
+            }, 2000);
+        });
+
+        function detectAdNetwork() {
+            if (typeof google !== "undefined" && google.adsense) {
+                adNetwork = "AdSense";
+            } else if (typeof PBJS !== "undefined") {
+                adNetwork = "PropellerAds";
+            } else if (typeof unityAds !== "undefined") {
+                adNetwork = "UnityAds";
+            }
+        }
+
+        function showRewardedAd() {
+            detectAdNetwork();
+
+            if (adNetwork === "AdSense") {
+                document.getElementById("status").innerText = "Loading Google AdSense Ad...";
+                google.adsense.rewarded.onAdComplete = function() {
+                    giveReward();
+                };
+                google.adsense.rewarded.requestAd();
+            } 
+            else if (adNetwork === "PropellerAds") {
+                document.getElementById("status").innerText = "Loading PropellerAds Ad...";
+                PBJS.que.push(function() {
+                    PBJS.loadRewardedAd({
+                        onAdLoaded: function() {
+                            document.getElementById("status").innerText = "Ad Loaded. Watching now...";
+                            PBJS.showRewardedAd({
+                                onComplete: function() {
+                                    giveReward();
+                                },
+                                onError: function() {
+                                    document.getElementById("status").innerText = "Ad failed to load. Try again later.";
+                                }
+                            });
+                        },
+                        onError: function() {
+                            document.getElementById("status").innerText = "No ads available. Come back later.";
+                        }
+                    });
+                });
+            } 
+            else if (adNetwork === "UnityAds") {
+                document.getElementById("status").innerText = "Loading Unity Ads...";
+                unityAds.showRewardedAd({
+                    onComplete: function() {
+                        giveReward();
+                    },
+                    onError: function() {
+                        document.getElementById("status").innerText = "Ad failed to load.";
+                    }
+                });
+            } 
+            else {
+                document.getElementById("status").innerText = "No ads available right now. Try again later.";
+            }
+        }
+
+        function giveReward() {
+            userPoints += 10;
+            document.getElementById("userPoints").innerText = userPoints;
+            saveUserPoints();
+            document.getElementById("status").innerText = "You earned 10 points!";
+        }
+
+        openDB();
+    </script>
+
+    <!-- Ad Network Scripts -->
+    <script src="https://proads-code.com/rewarded-ad.js"></script>
+    <script src="https://ads.google.com/adsense/rewarded.js"></script>
+    <script src="https://unityads.com/sdk.js"></script>
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+
+       html, body {
+    overflow-x: hidden; /* Prevents horizontal scroll */
+    margin: 0;
+    padding: 0;
+}
+      /* logo task mint*/
+      .logo {
+        font-size: 30px;
+        font-weight: bold;
+            color: black;
+        }
+
+        .logo span {
+            font-size: 14px;
+            font-weight: normal;
+            color: #ff9800;
+        }
+        .span2 {
+            font-size: 14px;
+            font-weight: normal;
+            color: #ff9800;
+        }
+        .coin {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #FFD700, #B8860B);
+            border-radius: 50%;
+            border: 3px solid #DAA520;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 15px;
+            font-weight: bold;
+            color: #8B7500;
+            text-shadow: 0px 0px 5px rgba(255, 223, 0, 0.8);
+            animation: spin 2s linear infinite;
+            transform-style: preserve-3d;
+        }
+        
+        /* 3D Spin animation */
+        @keyframes spin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        
+        
+
+        @media (max-width: 768px) {
+            /* logo task mint*/
+            .logo {
+              font-size: 40px;
+              font-weight: bold;
+              color: black;
+          }
+        
+          .logo span {
+              font-size: 24px;
+              font-weight: normal;
+              color: #ff9800;
+          }
+          .span2 {
+              font-size: 24px;
+              font-weight: normal;
+              color: #ff9800;
+          }
+          .logo-container{
+            font-size: 40px;
+            font-weight: bold;
+            color: black;
+          }
+        
+        }
+    

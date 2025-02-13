@@ -1,0 +1,28 @@
+
+
+
+.menu-container li {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
+    padding: 10px;
+    border-bottom: 1px solid black;
+}
+
+.menu-container li:last-child {
+    border-bottom: none;
+}
+
+.menu-container a {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+}
+
+.menu-container a span {
+    flex-grow: 1;  /* Ensures text takes up the remaining space */
+    text-align: left;
+}

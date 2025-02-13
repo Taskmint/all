@@ -1,0 +1,67 @@
+   /* Basic Reset */
+   * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Background Gradient */
+body {
+    background: linear-gradient(135deg, #3498db, #8e44ad); /* Attractive body background gradient */
+    height: 100%;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Full Page Height */
+html, body {
+    height: 100%;
+}
+
+/* Container for Menu - Aligns at the top */
+.menu-container1 {
+    background: linear-gradient(135deg, #3498db, #8e44ad); /* Attractive body background gradient */
+    padding: 20px;
+    border-radius: 0px;
+    width: 100%;
+    height: 15%;
+    text-align: center;
+    position: fixed; /* Fixes the menu to the top of the page */
+    top: 0; /* Aligns it to the top */
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Ensures it stays on top */
+    border: 2px solid black; /* Black border outline */
+}
+
+/* Navigation Links Style */
+.nav-link {
+    font-size: 18px;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px); /* Glass effect */
+    transition: all 0.3s ease-in-out;
+}
+
+.nav-link:hover {
+    background: linear-gradient(135deg, #3498db, black); /* Attractive body background gradient */
+    transform: scale(1.15);
+}
+
+/* Aligning Navigation Links horizontally in a row */
+.nav-container {
+    display: flex;
+    justify-content: flex-start; /* Align items from left to right */
+    gap: 10px; /* Space between links */
+}
+
+/* Make sure the links are aligned in a row */
+.nav-link {
+    display: inline-block; /* Ensure the links are inline */
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Glassy Grid</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: burlywood;
+            color: black;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .grid-item {
+            height: 100px;
+            background:lightseagreen;
+            border-radius: 10px;
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            color: black;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .grid-item:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+    <script>
+        function redirectToPage(index) {
+            window.open(`page${index}.html`, '_blank');
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Start Earning</h1>
+        <div class="grid">
+            <!-- 20 Items -->
+            <script>
+                for (let i = 1; i <= 20; i++) {
+                    document.write(`<div class='grid-item' onclick='redirectToPage(${i})'>Page ${i}</div>`);
+                }
+            </script>
+        </div>
+    </div>
+</body>
+</html>

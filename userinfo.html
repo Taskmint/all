@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glassy User Info Storage</title>
+    <style>
+        /* General Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            padding: 20px;
+        }
+
+        /* Container */
+        .container {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        /* User Info Display */
+        .user-data {
+            background: rgba(255, 255, 255, 0.4);
+            padding: 15px;
+            border-radius: 10px;
+            position: relative;
+            text-align: left;
+            transition: 0.3s;
+          
+        }
+
+        .edit-btn {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: rgba(0, 136, 255, 0.8);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 50%;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Form Styling */
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /*userinfo show userDisplay*/
+        userInfo{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            background: rgba(0, 136, 255, 0.8);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: rgba(0, 136, 255, 1);
+        }
+
+        /* Hide Element */
+        .hidden {
+            display: none;
+        }
+
+
+
+        /**/
+        #userInfo {
+    max-width: 400px;
+    width: 90%;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    color: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: left;
+    font-weight: bold;
+}
+
+#userInfo strong {
+    display: inline-block;
+    width: 100px;
+    color: black;
+    font-weight: bold;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>📝 User Information</h2>
+
+        <!-- Display User Info -->
+        <div id="userDisplay" class="user-data hidden">
+            <div id="userInfo"></div>
+            <button class="edit-btn" onclick="editData()">✏</button>
+        </div>
+
+        <!-- Edit Form -->
+        <div id="editForm" class="form-container">
+            <input type="text" id="name" placeholder="Full Name">
+            <input type="number" id="age" placeholder="Age">
+            <select id="gender">
+                <option value="" disabled selected>Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <input type="text" id="city" placeholder="City">
+            <input type="text" id="country" placeholder="Country">
+            <input type="tel" id="phone" placeholder="Phone Number" pattern="[0-9]{10}">
+            <input type="email" id="email" placeholder="Email">
+            <button onclick="saveData()">💾 Save</button>
+        </div>
+    </div>
+
+    <script>
+        // Open IndexedDB
+        let db;
+        const request = indexedDB.open("UserDB", 1);
+
+        request.onupgradeneeded = function(event) {
+            db = event.target.result;
+            let objectStore = db.createObjectStore("UserInfo", { keyPath: "id" });
+        };
+
+        request.onsuccess = function(event) {
+            db = event.target.result;
+            loadUserData(); // Load existing data
+        };
+
+        // Save Data to IndexedDB
+        function saveData() {
+            let transaction = db.transaction(["UserInfo"], "readwrite");
+            let objectStore = transaction.objectStore("UserInfo");
+            let request = objectStore.get("user");
+
+            request.onsuccess = function() {
+                let existingData = request.result || {};
+                let updatedData = {
+                    id: "user",
+                    name: document.getElementById("name").value || existingData.name,
+                    age: document.getElementById("age").value || existingData.age,
+                    gender: document.getElementById("gender").value || existingData.gender,
+                    city: document.getElementById("city").value || existingData.city,
+                    country: document.getElementById("country").value || existingData.country,
+                    phone: document.getElementById("phone").value || existingData.phone,
+                    email: document.getElementById("email").value || existingData.email,
+                };
+
+                objectStore.put(updatedData);
+
+                transaction.oncomplete = function() {
+                    loadUserData(); // Refresh data
+                    document.getElementById("editForm").classList.add("hidden");
+                    document.getElementById("userDisplay").classList.remove("hidden");
+                };
+            };
+        }
+
+        // Load User Data from IndexedDB
+        function loadUserData() {
+            let transaction = db.transaction(["UserInfo"], "readonly");
+            let objectStore = transaction.objectStore("UserInfo");
+            let request = objectStore.get("user");
+
+            request.onsuccess = function() {
+                if (request.result) {
+                    displayUserInfo(request.result);
+                    document.getElementById("userDisplay").classList.remove("hidden");
+                    document.getElementById("editForm").classList.add("hidden");
+                } else {
+                    document.getElementById("userDisplay").classList.add("hidden");
+                    document.getElementById("editForm").classList.remove("hidden");
+                }
+            };
+        }
+
+        // Display User Data in HTML
+        function displayUserInfo(data) {
+            document.getElementById("userInfo").innerHTML = `
+                <strong>Name</strong> ${data.name || "Not Set"} <br>
+                <strong>Age</strong> ${data.age || "Not Set"} <br>
+                <strong>Gender</strong> ${data.gender || "Not Set"} <br>
+                <strong>City</strong> ${data.city || "Not Set"} <br>
+                <strong>Country</strong> ${data.country || "Not Set"} <br>
+                <strong>Phone</strong> ${data.phone || "Not Set"} <br>
+                <strong>Email</strong> ${data.email || "Not Set"} <br>
+            `;
+        }
+
+        // Edit Data (Pre-fill input fields)
+        function editData() {
+            let transaction = db.transaction(["UserInfo"], "readonly");
+            let objectStore = transaction.objectStore("UserInfo");
+            let request = objectStore.get("user");
+
+            request.onsuccess = function() {
+                if (request.result) {
+                    document.getElementById("name").value = request.result.name || "";
+                    document.getElementById("age").value = request.result.age || "";
+                    document.getElementById("gender").value = request.result.gender || "";
+                    document.getElementById("city").value = request.result.city || "";
+                    document.getElementById("country").value = request.result.country || "";
+                    document.getElementById("phone").value = request.result.phone || "";
+                    document.getElementById("email").value = request.result.email || "";
+                }
+                document.getElementById("editForm").classList.remove("hidden");
+                document.getElementById("userDisplay").classList.add("hidden");
+            };
+        }
+    </script>
+</body>
+</html>

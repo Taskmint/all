@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #121212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    overflow: hidden;
+    padding: 5vw;
+}
+
+.container {
+    position: absolute;
+    width: 50%;
+    height: 86%;
+    background: rgb(3, 73, 70);
+    padding: 5vw;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    text-align: center;
+margin-top: 25%;
+}
+
+/* Banner Ad */
+.banner-ad {
+    width: 80%;
+    height: 60%;
+    display: flex;
+    position: absolute;
+    background: linear-gradient(135deg, #ff9800, #ff5722);
+    text-align: center;
+    line-height: 50px;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 8px;
+    font-size: 4vw;
+    box-shadow: 0 2px 10px rgba(255, 152, 0, 0.3);
+
+}
+
+/* Music Player */
+.music-player {
+    margin-top: 5vw;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 5vw;
+}
+
+.controls button {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    padding: 7px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 4vw;
+    color: #fff;
+    transition: 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+    margin-top: 40%;
+    size: 3px;
+}
+
+.controls button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* Music Name */
+.music-name {
+    margin-top: 5vw;
+    color: #fff;
+    font-size: 10px;
+}
+
+/* Close Button */
+.close-btn {
+    position: absolute;
+    top: 2vw;
+    right: 2vw;
+    cursor: pointer;
+    color: white;
+    font-size: 4vw;
+    transition: 0.3s ease-in-out;
+}
+
+.close-btn:hover {
+    color: #ff5722;
+}
+
+/* Minimized View */
+.minimized {
+    display: none;
+    position: fixed;
+    bottom: 3vw;
+    right: 3vw;
+    background: rebeccapurple;
+    padding: 10px;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    font-size: 10px;
+    size: 20px;
+    width: auto;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  
+.container {
+    position: absolute;
+    width: 80%;
+    height: 60%;
+    top: 10%;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5vw;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    text-align: center;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+}
+
+/* Banner Ad */
+.banner-ad {
+    width: 85%;
+    height: 50%;
+    display: flex;
+    position: absolute;
+    background: linear-gradient(135deg, #ff9800, #ff5722);
+    text-align: center;
+    line-height: 50px;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 8px;
+    font-size: 4vw;
+    box-shadow: 0 2px 10px rgba(255, 152, 0, 0.3);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+}
+
+    .controls button {
+        padding: 5vw;
+        font-size: 5vw;
+        bottom: 10%;
+        border: white 1px;
+        margin-top: 400px;
+    }
+    .music-name {
+        font-size: 10px;
+    }
+    .close-btn {
+        font-size: 5vw;
+    }
+    /* Minimized View */
+.minimized {
+    display: none;
+    position: fixed;
+    bottom: 3vw;
+    right: 3vw;
+    background: rebeccapurple;
+    padding: 10px;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    size: 30px;
+    width: auto;
+}
+
+}
+
+
+
+
+/* Responsive Adjustments */
+@media (max-width: 1000px) {
+  
+  .container {
+      position: absolute;
+      width: 80%;
+      height: 60%;
+      top: 10%;
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 5vw;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      text-align: center;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  
+  }
+  
+  /* Banner Ad */
+  .banner-ad {
+      width: 85%;
+      height: 50%;
+      display: flex;
+      position: absolute;
+      background: linear-gradient(135deg, #ff9800, #ff5722);
+      text-align: center;
+      line-height: 50px;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 8px;
+      font-size: 4vw;
+      box-shadow: 0 2px 10px rgba(255, 152, 0, 0.3);
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  
+  }
+  
+      .controls button {
+          padding: 5vw;
+          font-size: 5vw;
+          bottom: 10%;
+          border: white 1px;
+          margin-top: 400px;
+      }
+      .music-name {
+          font-size: 10px;
+      }
+      .close-btn {
+          font-size: 5vw;
+      }
+      /* Minimized View */
+  .minimized {
+      display: none;
+      position: fixed;
+      bottom: 3vw;
+      right: 3vw;
+      background: rebeccapurple;
+      padding: 10px;
+      border-radius: 12px;
+      color: white;
+      cursor: pointer;
+      font-size: 20px;
+      size: 30px;
+      width: auto;
+  }
+  
+  }
+  
+    </style>
+</head>
+<body>
+    <div class="container" id="musicPlayer">
+        <div class="banner-ad">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXX" data-ad-slot="YYYYYYYYYY" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+        <span class="close-btn" onclick="minimizePlayer()">&times;</span>
+        <div class="music-player">
+            <audio id="audio"></audio>
+            <div class="controls">
+                <button onclick="prevMusic()"><i class="fas fa-backward"></i></button>
+                <button onclick="togglePlayPause()" id="playPause"><i class="fas fa-play"></i></button>
+                <button onclick="nextMusic()"><i class="fas fa-forward"></i></button>
+            </div>
+            <div class="music-name" id="musicName">Loading...</div>
+        </div>
+    </div>
+    <div class="minimized" id="minimized" onclick="restorePlayer()">Music Playing</div>
+    <script>
+        let songs = [];
+        fetch('music')
+            .then(response => response.text())
+            .then(text => {
+                let parser = new DOMParser();
+                let htmlDoc = parser.parseFromString(text, 'text/html');
+                let links = htmlDoc.querySelectorAll('a[href$=".mp3"]');
+                links.forEach(link => songs.push(link.getAttribute('href')));
+                loadMusic(0);
+            });
+        
+        let currentSong = 0;
+        let audio = document.getElementById("audio");
+        let playPauseBtn = document.getElementById("playPause");
+        let musicName = document.getElementById("musicName");
+        let minimized = document.getElementById("minimized");
+        let player = document.getElementById("musicPlayer");
+
+        function loadMusic(index) {
+            audio.src = songs[index];
+            musicName.innerText = songs[index].split('/').pop();
+        }
+        
+        function togglePlayPause() {
+            if (audio.paused) {
+                audio.play();
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                audio.pause();
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        }
+        
+        function nextMusic() {
+            currentSong = (currentSong + 1) % songs.length;
+            loadMusic(currentSong);
+            audio.play();
+        }
+        
+        function prevMusic() {
+            currentSong = (currentSong - 1 + songs.length) % songs.length;
+            loadMusic(currentSong);
+            audio.play();
+        }
+        
+        function minimizePlayer() {
+            alert("Wait 5 seconds, leaving soon will lose your points!");
+            setTimeout(() => {
+                player.style.display = "none";
+                minimized.style.display = "block";
+                audio.play();
+            }, 1000);
+        }
+        
+        function restorePlayer() {
+            player.style.display = "block";
+            minimized.style.display = "none";
+        }
+    </script>
+</body>
+</html>

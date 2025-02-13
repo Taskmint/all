@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>taskmint</title>
+    <meta property="og:title" content="taskmint" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <style>
+      html, body {
+          overflow-x: hidden; /* Prevents horizontal scroll */
+          margin: 0;
+          padding: 0;
+          font-family: Inter, sans-serif;
+          background: lightgrey;
+          color: #333;
+      }
+      
+      .navbar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border: 2px solid black;
+          padding: 15px 20px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      
+      /* Logo and Coin Container */
+      .logo-container {
+          display: flex;
+          align-items: center;
+          gap: 10px; /* Space between coin and text */
+      }
+      
+      /* 3D Spinning Coin */
+      .coin {
+          width: 40px;
+          height: 40px;
+          background: radial-gradient(circle, #FFD700, #B8860B);
+          border-radius: 50%;
+          border: 3px solid #DAA520;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 15px;
+          font-weight: bold;
+          color: #8B7500;
+          text-shadow: 0px 0px 5px rgba(255, 223, 0, 0.8);
+          animation: spin 2s linear infinite;
+          transform-style: preserve-3d;
+      }
+      
+      /* 3D Spin animation */
+      @keyframes spin {
+          0% { transform: rotateY(0deg); }
+          100% { transform: rotateY(360deg); }
+      }
+      
+      /* TaskMint Logo */
+      .logo {
+          font-size: 30px;
+          font-weight: bold;
+          color: white;
+      }
+      
+      .logo span {
+          font-size: 14px;
+          font-weight: normal;
+          color: #ff9800;
+      }
+      
+      /* Buttons */
+      .navbar-buttons button {
+          padding: 8px 22px;
+          border: none;
+          border-radius: 8px;
+          background: black;
+          color: white;
+          font-weight: bold;
+          cursor: pointer;
+          transition: all 0.3s ease-in-out;
+      }
+      
+      .navbar-buttons button:hover {
+          background: #e68900;
+      }
+      .home-text117{
+
+        color: black;
+      }
+      
+      /* Responsive Design */
+      @media (max-width: 768px) {
+          .navbar {
+              flex-direction: column;
+              text-align: center;
+          }
+      
+          .logo-container {
+              margin-bottom: 10px;
+          }
+      
+          .navbar-buttons button {
+              width: 100%;
+              margin: 5px 0;
+          }
+      }
+
+      </style>
+    <style data-tag="reset-style-sheet">
+      html {  line-height: 1.15;}body {  margin: 0;}* {  box-sizing: border-box;  border-width: 0;  border-style: solid;  -webkit-font-smoothing: antialiased;}p,li,ul,pre,div,h1,h2,h3,h4,h5,h6,figure,blockquote,figcaption {  margin: 0;  padding: 0;}button {  background-color: transparent;}button,input,optgroup,select,textarea {  font-family: inherit;  font-size: 100%;  line-height: 1.15;  margin: 0;}button,select {  text-transform: none;}button,[type="button"],[type="reset"],[type="submit"] {  -webkit-appearance: button;  color: inherit;}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {  border-style: none;  padding: 0;}button:-moz-focus,[type="button"]:-moz-focus,[type="reset"]:-moz-focus,[type="submit"]:-moz-focus {  outline: 1px dotted ButtonText;}a {  color: inherit;  text-decoration: inherit;}input {  padding: 2px 4px;}img {  display: block;}details {  display: block;  margin: 0;  padding: 0;}summary::-webkit-details-marker {  display: none;}[data-thq="accordion"] [data-thq="accordion-content"] {  max-height: 0;  overflow: hidden;  transition: max-height 0.3s ease-in-out;  padding: 0;}[data-thq="accordion"] details[data-thq="accordion-trigger"][open] + [data-thq="accordion-content"] {  max-height: 1000vh;}details[data-thq="accordion-trigger"][open] summary [data-thq="accordion-icon"] {  transform: rotate(180deg);}html { scroll-behavior: smooth  }
+    </style>
+    <link rel="stylesheet" href="logo.css">
+   
+  <script src="lastvisitedpage.js"></script>
+  </head>
+  <body>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
+
+<link rel="stylesheet" href="./style.css" />
+<div>
+  <link href="./index.css" rel="stylesheet" />
+      <div class="navbar">
+        <div class="logo-container">
+            <div class="coin">T</div>
+            <div class="logo">Task<span>Mint</span></div>
+        </div>
+        
+        <div class="navbar-buttons">
+            <button onclick="loadPage('signupwithemaillink.html')">Sign In</button>
+            <button onclick="loadPage('signupwithemaillink.html')">Register</button>
+        </div>
+    </div>
+    
+    <script>
+        function loadPage(page) {
+            window.location.href = page;
+            savePage(page);
+        }
+    </script>
+    
+
+
+
+          
+            <div class="navbar8-container8"></div>
+        </navbar8-wrapper>
+        <hero17-wrapper class="hero17-wrapper">
+          <!--Hero17 component-->
+          <div class="hero17-header78">
+            <div
+              class="hero17-column thq-section-padding thq-section-max-width"
+            >
+              <div class="hero17-content1">
+                <h1 class="hero17-text1 thq-heading-1">
+                  <fragment class="home-fragment117">
+                    <span class="home-text117">
+                      Earn Money by Completing Tasks
+                    </span>
+                  </fragment>
+                </h1>
+                <p class="hero17-text2 thq-body-large">
+                  <fragment class="home-fragment116">
+                    <span class="home-text116">
+                      Join our platform and start earning money by completing
+                      simple tasks online. No special skills required!
+                    </span>
+                  </fragment>
+                </p>
+              </div>
+              <div class="hero17-actions">
+                <button class="thq-button-filled hero17-button1" onclick="redirectTo('signupwithemaillink.html')">
+                    <span class="thq-body-small">
+                        <span class="home-text114">Get Started</span>
+                    </span>
+                </button>
+                
+                <button class="thq-button-outline hero17-button2" onclick="redirectTo('aboutus.html')">
+                    <span class="thq-body-small">
+                        <span class="home-text115">Learn More</span>
+                    </span>
+                </button>
+            </div>
+            
+            <script>
+                function redirectTo(page) {
+                    window.location.href = page;
+                    savePage(page);
+
+                }
+            </script>
+            
+            </div>
+            <div class="hero17-content2">
+              <div
+                class="hero17-row-container1 thq-animated-group-container-horizontal thq-mask-image-horizontal"
+              >
+               
+                </div>
+              </div>
+              <div
+                class="hero17-row-container2 thq-animated-group-container-horizontal thq-mask-image-horizontal"
+              >
+                
+              </div>
+            </div>
+            <div>
+              <div class="hero17-container2">
+                <style>
+                  @keyframes scroll-x {
+                    from {
+                      transform: translateX(0);
+                    }
+                    to {
+                      transform: translateX(calc(-100% - 16px));
+                    }
+                  }
+
+                  @keyframes scroll-y {
+                    from {
+                      transform: translateY(0);
+                    }
+                    to {
+                      transform: translateY(calc(-100% - 16px));
+                    }
+                  }
+                </style>
+              </div>
+            </div>
+          </div>
+        </hero17-wrapper>
+        <features24-wrapper class="features24-wrapper">
+          <!--Features24 component-->
+          <div class="thq-section-padding">
+            <div class="features24-container2 thq-section-max-width">
+             
+              <div class="features24-tabs-menu">
+                <div class="features24-tab-horizontal1">
+                  <div class="features24-divider-container1">
+                    <div class="features24-container3"></div>
+                  </div>
+                  <div class="features24-content1">
+                    <h2 class="thq-heading-2">
+                      <fragment class="home-fragment118">
+                        <span class="home-text118">Earn Money</span>
+                      </fragment>
+                    </h2>
+                    <span class="thq-body-small">
+                      <fragment class="home-fragment121">
+                        <span class="home-text121">
+                          Complete tasks and get paid
+                        </span>
+                      </fragment>
+                    </span>
+                  </div>
+                </div>
+                <div class="features24-tab-horizontal2">
+                  <div class="features24-divider-container2">
+                    <div class="features24-container4"></div>
+                  </div>
+                  <div class="features24-content2">
+                    <h2 class="thq-heading-2">
+                      <fragment class="home-fragment119">
+                        <span class="home-text119">Task Diversity</span>
+                      </fragment>
+                    </h2>
+                    <span class="thq-body-small">
+                      <fragment class="home-fragment122">
+                        <span class="home-text122">Wide variety of tasks</span>
+                      </fragment>
+                    </span>
+                  </div>
+                </div>
+                <div class="features24-tab-horizontal3">
+                  <div class="features24-divider-container3">
+                    <div class="features24-container5"></div>
+                  </div>
+                  <div class="features24-content3">
+                    <h2 class="thq-heading-2">
+                      <fragment class="home-fragment120">
+                        <span class="home-text120">Quick Payouts</span>
+                      </fragment>
+                    </h2>
+                    <span class="thq-body-small">
+                      <fragment class="home-fragment123">
+                        <span class="home-text123">Redeem rewards easily</span>
+                      </fragment>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </features24-wrapper>
+        <cta26-wrapper class="cta26-wrapper">
+          <!--CTA26 component-->
+          <div class="thq-section-padding">
+            <div class="thq-section-max-width">
+              <div class="cta26-accent2-bg">
+                <div class="cta26-accent1-bg">
+                  <div class="cta26-container2">
+                    <div class="cta26-content">
+                      <span class="thq-heading-2">
+                        <fragment class="home-fragment126">
+                          <span class="home-text126">
+                            Start Earning Money Today!
+                          </span>
+                        </fragment>
+                      </span>
+                      <p class="thq-body-large">
+                        <fragment class="home-fragment125">
+                          <span class="home-text125">
+                            Sign up now to access a variety of tasks and start
+                            earning money from the comfort of your own home.
+                          </span>
+                        </fragment>
+                      </p>
+                    </div>
+                    <div class="cta26-actions">
+                      <button type="button" class="thq-button-filled cta26-button" onclick="redirectToSignup()">
+                          <span>
+                              <span class="home-text124">Sign Up Now</span>
+                          </span>
+                      </button>
+                  </div>
+                  
+                  <script>
+                      function redirectToSignup() {
+                          window.location.href = 'signupwithemaillink.html';
+                          savePage(page);
+
+                      }
+                  </script>
+                  
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </cta26-wrapper>
+        <features25-wrapper class="features25-wrapper">
+          <!--Features25 component-->
+          <div class="thq-section-padding">
+            <div class="features25-container2 thq-section-max-width">
+              <div class="features25-tabs-menu">
+                <div class="features25-tab-horizontal1">
+                  <div class="features25-divider-container1">
+                    <div class="features25-container3"></div>
+                  </div>
+                  <div class="features25-content1">
+                    <h2 class="thq-heading-2">
+                      <fragment class="home-fragment127">
+                        <span class="home-text127">Task Variety</span>
+                      </fragment>
+                    </h2>
+                    <span class="thq-body-small">
+                      <fragment class="home-fragment130">
+                        <span class="home-text130">
+                          Complete a wide range of tasks from simple surveys to
+                          more complex assignments.
+                        </span>
+                      </fragment>
+                    </span>
+                  </div>
+                </div>
+                <div class="features25-tab-horizontal2">
+                  <div class="features25-divider-container2">
+                    <div class="features25-container4"></div>
+                  </div>
+                  <div class="features25-content2">
+                    <h2 class="thq-heading-2">
+                      <fragment class="home-fragment128">
+                        <span class="home-text128">Flexible Schedule</span>
+                      </fragment>
+                    </h2>
+                    <span class="thq-body-small">
+                      <fragment class="home-fragment131">
+                        <span class="home-text131">
+                          Work on tasks at your own pace and schedule, earning
+                          money whenever it's convenient for you.
+                        </span>
+                      </fragment>
+                    </span>
+                  </div>
+                </div>
+                <div class="features25-tab-horizontal3">
+                  <div class="features25-divider-container3">
+                    <div class="features25-container5"></div>
+                  </div>
+                  <div class="features25-content3">
+                    <h2 class="thq-heading-2">
+                      <fragment class="home-fragment129">
+                        <span class="home-text129">Earn Rewards</span>
+                      </fragment>
+                    </h2>
+                    <span class="thq-body-small">
+                      <fragment class="home-fragment132">
+                        <span class="home-text132">
+                          Get rewarded with cash or gift cards for every task
+                          you successfully complete.
+                        </span>
+                      </fragment>
+                    </span>
+                  </div>
+                </div>
+              </div>
+             
+            </div>
+          </div>
+        </features25-wrapper>
+       
+        <!--Create an account on our platform to start earning money by completing tasks.-->
+        <steps2-wrapper class="steps2-wrapper">
+          <!--Steps2 component-->
+          
+                 
+                 
+                
+                </div>
+             
+                  <div class="steps2-container4 thq-card">
+                    <h2 class="thq-heading-2">
+                    
+                    </h2>
+                    <span class="steps2-text14 thq-body-small">
+                      <fragment class="home-fragment188">
+                        <span class="home-text188">
+                          Create an account on our platform to start earning
+                          money by completing tasks.
+                        </span>
+                      </fragment>
+                    </span>
+                    <label class="steps2-text15 thq-heading-3">01</label>
+                  </div>
+                  <div class="steps2-container5 thq-card">
+                    <h2 class="thq-heading-2">
+                      <fragment class="home-fragment185">
+                        <span class="home-text185">Browse Tasks</span>
+                      </fragment>
+                    </h2>
+                    <span class="steps2-text17 thq-body-small">
+                      <fragment class="home-fragment189">
+                        <span class="home-text189">
+                          Explore a variety of tasks available on the platform
+                          and choose the ones that interest you.
+                        </span>
+                      </fragment>
+                    </span>
+                    <label class="steps2-text18 thq-heading-3">02</label>
+                  </div>
+                  <div class="steps2-container6 thq-card">
+                    <h2 class="thq-heading-2">
+                      <fragment class="home-fragment186">
+                        <span class="home-text186">Complete Tasks</span>
+                      </fragment>
+                    </h2>
+                    <span class="steps2-text20 thq-body-small">
+                      <fragment class="home-fragment190">
+                        <span class="home-text190">
+                          Follow the instructions for each task carefully and
+                          complete them to earn rewards.
+                        </span>
+                      </fragment>
+                    </span>
+                    <label class="steps2-text21 thq-heading-3">03</label>
+                  </div>
+                  <div class="steps2-container7 thq-card">
+                    <h2 class="thq-heading-2">
+                      <fragment class="home-fragment187">
+                        <span class="home-text187">Get Paid</span>
+                      </fragment>
+                    </h2>
+                    <span class="steps2-text23 thq-body-small">
+                      <fragment class="home-fragment191">
+                        <span class="home-text191">
+                          Once you have successfully completed a task, receive
+                          your payment directly to your account.
+                        </span>
+                      </fragment>
+                    </span>
+                    <label class="steps2-text24 thq-heading-3">04</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </steps2-wrapper>
+        <testimonial17-wrapper class="testimonial17-wrapper">
+          <!--Testimonial17 component-->
+          <div class="thq-section-padding">
+            <div class="testimonial17-max-width thq-section-max-width">
+              <div class="testimonial17-container10">
+                <h2 class="thq-heading-2">
+                  <fragment class="home-fragment197">
+                    <span class="home-text197">Testimonials</span>
+                  </fragment>
+                </h2>
+                <span class="testimonial17-text11 thq-body-small">
+                  <fragment class="home-fragment196">
+                    
+                  </fragment>
+                </span>
+              </div>
+              <div class="thq-grid-2">
+                <div class="thq-animated-card-bg-2">
+                  <div class="thq-animated-card-bg-1">
+                    <div
+                      data-animated="true"
+                      class="thq-card testimonial17-card1"
+                    >
+                      <div class="testimonial17-container12">
+                        <img
+                          alt="Image of John Doe"
+                          src="https://images.unsplash.com/photo-1442328166075-47fe7153c128?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczODExODkzNXw&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1080"
+                          class="testimonial17-image1"
+                        />
+                        <div class="testimonial17-container13">
+                          <strong class="thq-body-large">
+                            <fragment class="home-fragment198">
+                              <span class="home-text198">John Doe</span>
+                            </fragment>
+                          </strong>
+                          <span class="thq-body-small">
+                            <fragment class="home-fragment202">
+                            </fragment>
+                          </span>
+                        </div>
+                      </div>
+                      <span class="testimonial17-text14 thq-body-small">
+                        <fragment class="home-fragment192">
+                          <span class="home-text192">
+                            "I've been using TaskMint for a few weeks now, and I’m really impressed! I started by watching ads and completing surveys in my free time, and I’ve already cashed out $25. The platform is super easy to use, and the daily rewards make it even more exciting. I love how I can earn just by spending a few minutes each day!"
+                          </span>
+                        </fragment>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="thq-animated-card-bg-2">
+                  <div class="thq-animated-card-bg-1">
+                    <div
+                      data-animated="true"
+                      class="thq-card testimonial17-card2"
+                    >
+                      <div class="testimonial17-container14">
+                        <img
+                          alt="Image of Jane Smith"
+                          src="https://images.unsplash.com/photo-1561031454-4f1331bd2a34?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczODExODk0MXw&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1080"
+                          class="testimonial17-image2"
+                        />
+                        <div class="testimonial17-container15">
+                          <strong class="thq-body-large">
+                            <fragment class="home-fragment199">
+                              <span class="home-text199">Jane Smith</span>
+                            </fragment>
+                          </strong>
+                          <span class="thq-body-small">
+                            <fragment class="home-fragment203">
+                            </fragment>
+                          </span>
+                        </div>
+                      </div>
+                      <span class="testimonial17-text17 thq-body-small">
+                        <fragment class="home-fragment193">
+                          <span class="home-text193">
+                            "TaskMint is a game-changer! I enjoy playing mobile games, and now I get paid for it! I’ve also tried out the surveys and some small tasks, and the payouts are legit. I’ve withdrawn money twice without any issues. Highly recommend it to anyone looking for a simple way to earn extra cash!"
+                          </span>
+                        </fragment>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="thq-animated-card-bg-2">
+                  <div class="thq-animated-card-bg-1">
+                    <div
+                      data-animated="true"
+                      class="thq-card testimonial17-card3"
+                    >
+                      <div class="testimonial17-container16">
+                        <img
+                          alt="Image of David Johnson"
+                          src="https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczODExODk0N3w&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1080"
+                          class="testimonial17-image3"
+                        />
+                        <div class="testimonial17-container17">
+                          <strong class="thq-body-large">
+                            <fragment class="home-fragment200">
+                              <span class="home-text200">David Johnson</span>
+                            </fragment>
+                          </strong>
+                          <span class="thq-body-small">
+                            <fragment class="home-fragment204">
+                             
+                            </fragment>
+                          </span>
+                        </div>
+                      </div>
+                      <span class="testimonial17-text20 thq-body-small">
+                        <fragment class="home-fragment194">
+                          <span class="home-text194">
+                            "I was skeptical at first, but TaskMint proved me wrong! The website offers multiple ways to earn, from watching rewarded ads to completing surveys and even testing new apps. What I love most is the daily bonus feature – it keeps me coming back. I’ve earned over $50 so far, and it’s totally worth the time!"
+
+
+                          </span>
+                        </fragment>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="thq-animated-card-bg-2">
+                  <div class="thq-animated-card-bg-1">
+                    <div
+                      data-animated="true"
+                      class="thq-card testimonial17-card4"
+                    >
+                      <div class="testimonial17-container18">
+                        <img
+                          alt="Image of Sarah Lee"
+                          src="https://images.unsplash.com/photo-1615477081663-8498d3827bc0?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczODExODkzOXw&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1080"
+                          class="testimonial17-image4"
+                        />
+                        <div class="testimonial17-container19">
+                          <strong class="thq-body-large">
+                            <fragment class="home-fragment201">
+                              <span class="home-text201">Sarah Lee</span>
+                            </fragment>
+                          </strong>
+                          <span class="thq-body-small">
+                            <fragment class="home-fragment205">
+                            </fragment>
+                          </span>
+                        </div>
+                      </div>
+                      <span class="testimonial17-text23 thq-body-small">
+                        <fragment class="home-fragment195">
+                          <span class="home-text195">
+                            "This is hands down one of the best reward platforms out there! I usually do surveys and ad-watching tasks during my lunch breaks, and I’ve earned a decent amount. The best part is that TaskMint actually pays on time, unlike other shady apps. If you're consistent, you can easily make some extra cash every month!"
+
+
+                          </span>
+                        </fragment>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </testimonial17-wrapper>
+        <link rel="stylesheet" href="cards.css">
+    
+        <div class="container">
+          <div class="card">
+              <h2 class="head">Earn by Watching Ads & Videos</h2>
+              <p>Watch engaging ads and videos to earn real rewards. The more you watch, the more you earn! Start now and boost your income effortlessly.</p>
+          </div>
+    
+          <div class="card">
+              <h2 class="head">Survey-Based Earnings</h2>
+              <p>Complete simple surveys and get paid for sharing your opinions. Your voice matters, and so do your earnings! Join today.</p>
+          </div>
+    
+          <div class="card">
+              <h2 class="head">High-Paying Task Completion</h2>
+              <p>Complete small tasks and get rewarded instantly. The more tasks you finish, the higher the payout. Take control of your earnings now!</p>
+          </div>
+    
+          <div class="card">
+              <h2 class="head">Install & Run Apps</h2>
+              <p>Get paid for installing and running apps in the background. Passive earnings made easy—just install, run, and earn while you relax!</p>
+          </div>
+    
+          <div class="card">
+              <h2 class="head">Upcoming: Work From Home Jobs</h2>
+              <p>More tasks, freelancing, and work-from-home jobs are coming soon. Stay tuned for exciting new earning opportunities!</p>
+          </div>
+    
+      </div>
+      <footer4-wrapper class="footer4-wrapper">
+        <!--Footer4 component-->
+        <footer class="footer4-footer7 thq-section-padding">
+            <div class="footer4-max-width thq-section-max-width">
+                <div class="footer4-content">
+                    <div class="logo-container">
+                        <div class="coin">T</div>
+                        <div class="logo2">Task<span class="span2">Mint</span></div>
+                    </div>
+    
+                    <div class="footer4-links">
+                        <a href="aboutus.html" target="_self" rel="noreferrer noopener" class="thq-body-small">
+                            <fragment class="home-fragment212">
+                                <span class="home-text212">About Us</span>
+                            </fragment>
+                        </a>
+                        <a href="contact.html" target="_self" rel="noreferrer noopener" class="thq-body-small">
+                            <fragment class="home-fragment213">
+                                <span class="home-text213">Contact Us</span>
+                            </fragment>
+                        </a>
+                        <a href="index.html" target="_self" rel="noreferrer noopener" class="thq-body-small">
+                            <fragment class="home-fragment214">
+                                <span class="home-text214">FAQs</span>
+                            </fragment>
+                        </a>
+                        <a href="index.html" target="_self" rel="noreferrer noopener" class="thq-body-small">
+                            <fragment class="home-fragment215">
+                                <span class="home-text215">Terms and Conditions</span>
+                            </fragment>
+                        </a>
+                        <a href="index.html" target="_self" rel="noreferrer noopener" class="thq-body-small">
+                            <fragment class="home-fragment216">
+                                <span class="home-text216">Privacy Policy</span>
+                            </fragment>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer4-credits">
+                    <div class="thq-divider-horizontal"></div>
+                    <div class="footer4-row">
+                        <div class="footer4-container">
+                            <span class="thq-body-small">© 2024 Taskmint</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </footer4-wrapper>
+    
+  
+
+
+
+  </body>
+</html>

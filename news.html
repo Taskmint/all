@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest News</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #news-container { max-width: 600px; margin: auto; padding: 20px; }
+        .news-item { border-bottom: 1px solid #ccc; padding: 10px 0; }
+        .news-item a { text-decoration: none; color: blue; }
+
+
+    </style>
+    <script src="db.js"></script>
+    <link rel="stylesheet" href="pointsshow.css">
+</head>
+<body>
+
+    <h2 style="text-align: center;">Latest News</h2>
+    <div id="displayPoints">0</div> <!-- Ensure this element exists -->
+
+    <div id="news-container">Loading news...</div>
+    
+    <script>
+        let isSafeToLeave = false;
+          // Add Points After Reading News for 10 Seconds
+      
+
+        function startRewardTimer() {
+            setTimeout(() => {
+                isSafeToLeave = true; // Allow user to leave safely
+            }, 10000);
+        }
+        
+
+
+        async function loadNews() {
+            try {
+                const response = await fetch("https://api.currentsapi.services/v1/latest-news?apiKey=HpEw6I54u3aiR01HPX6VXHTFfpz7niY_WV68Adpb2OfqeXxG");
+                const data = await response.json();
+    
+                const newsContainer = document.getElementById("news-container");
+                newsContainer.innerHTML = ""; // Clear previous content
+    
+                if (!data.news || data.news.length === 0) {
+                    newsContainer.innerText = "No news available.";
+                    return;
+                }
+    
+                // Shuffle the news articles randomly
+                const shuffledNews = data.news.sort(() => 0.5 - Math.random());
+    
+                // Select a few (e.g., 3) random articles
+                const selectedNews = shuffledNews.slice(0, 3);
+    
+                selectedNews.forEach(article => {
+                    const newsItem = document.createElement("div");
+                    newsItem.classList.add("news-item");
+                    newsItem.innerHTML = `
+                        <h3>${article.title}</h3>
+                        <p>${article.description}</p>  <!-- Limit description length -->
+                    `;
+                    newsContainer.appendChild(newsItem);
+                });
+                setTimeout(startGameIntervals, 10000);
+
+                // Allow safe leaving after 5 seconds
+                setTimeout(() => {
+                    isSafeToLeave = true;
+                }, 10000);
+
+            } catch (error) {
+                document.getElementById("news-container").innerText = "Failed to load news.";
+            }
+        }
+        function startGameIntervals(){
+            addPoints(1, updateDisplay);
+
+        }
+    
+        loadNews();
+    
+        // Warn user if they try to leave within 5 seconds
+        window.addEventListener("beforeunload", function (event) {
+            if (!isSafeToLeave) {
+                event.preventDefault();
+                event.returnValue = "You are leaving too soon! You may lose your points.";
+            }
+        });
+
+        // Detect tab switching or minimizing
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden && !isSafeToLeave) {
+                alert("Warning: Leaving too soon may result in losing your points!");
+            }
+        });
+
+    </script>
+
+</body>
+</html>

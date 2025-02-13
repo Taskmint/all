@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check User Points</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            font-size: 18px;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        /* Loading state */
+        .loading {
+            font-size: 16px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Check Your Points</h1>
+        <p class="loading" id="loadingMessage">Loading...</p>
+        <p id="pointsMessage"></p>
+        <button id="checkPointsButton">Check Points</button>
+        <button id="addPointsButton">Add 20 Points</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyCpoMclgXGuDxb1muQ-4eP-_MB3ZdRd4DE",
+            authDomain: "taskmint-237c0.firebaseapp.com",
+            projectId: "taskmint-237c0",
+            storageBucket: "taskmint-237c0.firebasestorage.app",
+            messagingSenderId: "180156821472",
+            appId: "1:180156821472:web:c8cc6c91835be05091c585",
+            measurementId: "G-880TPF7J3L"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Elements
+        const pointsMessage = document.getElementById('pointsMessage');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const checkPointsButton = document.getElementById('checkPointsButton');
+        const addPointsButton = document.getElementById('addPointsButton');
+
+        // Function to fetch points for the currently authenticated user
+        async function getUserPoints() {
+            const user = auth.currentUser;
+
+            if (user) {
+                // Display loading message while fetching data
+                loadingMessage.textContent = "Fetching your points...";
+
+                // Get a reference to the user's document in Firestore
+                const userRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(userRef);
+
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
+                    pointsMessage.textContent = `Your points: ${userData.points}`;
+                    loadingMessage.textContent = "";
+                } else {
+                    pointsMessage.textContent = "No user data found.";
+                    loadingMessage.textContent = "";
+                }
+            } else {
+                pointsMessage.textContent = "No user is logged in.";
+                loadingMessage.textContent = "";
+            }
+        }
+
+        // Function to add points for the currently authenticated user
+        async function addPoints() {
+            const user = auth.currentUser;
+
+            if (user) {
+                // Get a reference to the user's document in Firestore
+                const userRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(userRef);
+
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
+                    const updatedPoints = userData.points + 20;
+
+                    // Update the user's points
+                    await updateDoc(userRef, {
+                        points: updatedPoints
+                    });
+
+                    // Display the updated points
+                    pointsMessage.textContent = `Your points: ${updatedPoints}`;
+                } else {
+                    pointsMessage.textContent = "No user data found.";
+                }
+            } else {
+                pointsMessage.textContent = "No user is logged in.";
+            }
+        }
+
+        // Call the function when the button is clicked
+        checkPointsButton.addEventListener('click', () => {
+            getUserPoints();
+        });
+
+        // Call the function when the "Add 20 Points" button is clicked
+        addPointsButton.addEventListener('click', () => {
+            addPoints();
+        });
+    </script>
+
+</body>
+</html>

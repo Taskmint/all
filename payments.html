@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Request</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+        }
+        .card {
+            padding: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.3s;
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+        }
+        .card:hover {
+            transform: scale(1.1);
+        }
+        h2{color: white;}
+    </style>
+        <script src="lastvisitedpage.js"></script>
+
+</head>
+<body>
+    <h2>Select a Reward to Withdraw</h2>
+    <div class="container" id="cardContainer">
+        <div class="card" onclick="makeRequest(1)">$1 USD</div>
+        <div class="card" onclick="makeRequest(5)">$5 USD</div>
+        <div class="card" onclick="makeRequest(100)">$100 USD</div>
+        <div class="card" onclick="makeRequest(200)">$200 USD</div>
+        <div class="card" onclick="makeRequest(1000)">$1000 USD</div>
+    </div>
+    
+    <script>
+        function makeRequest(amount) {
+            let userId = "12345"; // Example user ID
+            let userPoints = 15000; // Example user points
+            let requiredPoints = amount * 10000;
+            
+            if (userPoints >= requiredPoints) {
+                alert(`Payment request of $${amount} USD sent successfully!`);
+                // Here you can add an AJAX request to send the data to the backend
+            } else {
+                alert("You don't have enough points to withdraw this amount.");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+  html, body {
+      overflow-x: hidden; /* Prevents horizontal scroll */
+      margin: 0;
+      padding: 0;
+      font-family: Inter, sans-serif;
+      color: #333;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+  }
+  
+  .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+
+      padding: 15px 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Logo and Coin Container */
+  .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px; /* Space between coin and text */
+  }
+  .profile{
+    margin-top: 0px;
+    margin-left: 70%;
+    top: 0%;
+
+    padding: 8px 22px;
+    border: none;
+    border-radius: 8px;
+    background: #ff9800;
+    color: white;
+    font-weight: bold;
+  
+  }
+  
+  /* 3D Spinning Coin */
+  .coin {
+      width: 40px;
+      height: 40px;
+      margin-left: 10%;
+      background: radial-gradient(circle, #FFD700, #B8860B);
+      border-radius: 50%;
+      border: 3px solid #DAA520;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 15px;
+      font-weight: bold;
+      color: #8B7500;
+      text-shadow: 0px 0px 5px rgba(255, 223, 0, 0.8);
+      animation: spin 2s linear infinite;
+      transform-style: preserve-3d;
+  }
+  
+  /* 3D Spin animation */
+  @keyframes spin {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
+  }
+  
+  /* TaskMint Logo */
+  .logo {
+      font-size: 30px;
+      font-weight: bold;
+      color: white;
+  }
+  .logo2 {
+    font-size: 30px;
+    font-weight: bold;
+    color: black;
+}
+
+.span2 {
+    font-size: 14px;
+    font-weight: normal;
+    color: #ff9800;
+}
+
+  
+  .logo span {
+      font-size: 14px;
+      font-weight: normal;
+      color: #ff9800;
+  }
+  
+  /* Buttons */
+  .navbar-buttons button {
+      padding: 8px 22px;
+      border: none;
+      border-radius: 8px;
+      background: #ff9800;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+  }
+  
+  .navbar-buttons button:hover {
+      background: #e68900;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+      .navbar {
+          flex-direction: column;
+          text-align: center;
+      }
+  
+      .logo-container {
+          margin-bottom: 10px;
+      }
+  
+      .navbar-buttons button {
+          width: 100%;
+          margin: 5px 0;
+      }
+      .coin {
+        width: 40px;
+        height: 40px;
+        margin-left: 30%;
+        background: radial-gradient(circle, #FFD700, #B8860B);
+        border-radius: 50%;
+        border: 6px solid #DAA520;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 10px;
+        font-weight: bold;
+        color: #8B7500;
+        text-shadow: 0px 0px 5px rgba(255, 223, 0, 0.8);
+        animation: spin 2s linear infinite;
+        transform-style: preserve-3d;
+        position: fixed;
+    }
+    
+.menu-toggle {
+    font-size: 30px;
+    background: linear-gradient(135deg, #3498db, #8e44ad); /* Attractive body background gradient */
+    color: linear-gradient(135deg, #3498db, #8e44ad); /* Attractive body background gradient */
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    position: fixed;
+    margin-top: auto;
+    margin-left: 1px;
+    top: 6px;
+    left: 1px;
+    z-index: 10;
+    height: 9%;
+  }
+  .logo {
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    top: 3%;
+    margin-top: 0%;
+    text-align: center;
+    position: fixed;
+    margin-left: 40%;
+    
+}
+
+
+.span2 {
+  font-size: 5px;
+  font-weight: normal;
+  color: #ff9800;
+}
+
+
+.logo span {
+    font-size: 14px;
+    font-weight: normal;
+    color: #ff9800;
+}
+.menu-container1 {
+    background: linear-gradient(135deg, #3498db, #8e44ad); /* Attractive body background gradient */
+    padding: 20px;
+    border-radius: 0px;
+    width: 100%;
+    height: 10%;
+    text-align: center;
+    position: fixed; /* Fixes the menu to the top of the page */
+    top: 0; /* Aligns it to the top */
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Ensures it stays on top */
+    border: 2px solid black; /* Black border outline */
+}
+.nav-container{
+    position: fixed;
+}
+
+
+
+  .iframe-container {
+    width: 100%;
+    margin-left: 0;
+    height: 90%;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100vh;
+  }
+  .menu-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+/*profile*/
+
+.profile {
+    font-size: 12px; /* Slightly increased for better visibility */
+    padding: 6px 15px;
+    border: none;
+    border-radius: 5px;
+    background: #ff9800;
+    color: white;
+    font-weight: bold;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap; /* Prevents text wrapping */
+    z-index: 1000; /* Keeps it above other elements */
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .profile {
+        font-size: 10px;
+        padding: 4px 10px;
+        top: 15px;
+        right: 5px;
+    }
+}
+
+
+  }

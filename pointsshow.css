@@ -1,0 +1,29 @@
+
+#displayPoints {
+    position: fixed; /* Keeps it at the top */
+    top: 20px; /* Distance from the top */
+    left: 10%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    min-width: 100px;
+    max-width: 200px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    #displayPoints {
+        font-size: 15px;
+        padding: 7px 7px;
+        left: 15%;
+
+    }
+}

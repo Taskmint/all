@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .dashboard {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .blue { background: #3b82f6; color: white; }
+        .green { background: #22c55e; color: white; }
+        .yellow { background: #e64a19; color: white; }
+        .orange { background: rebeccapurple; color: white; }
+        .lightblue { background: lightblue; color: white; }
+        .lightseagreen { background: lightseagreen; color: white; }
+        .lightslategray { background: lightslategray; color: white; }
+
+
+
+
+        .earn-more {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            font-size: 16px;
+            color: white;
+            background: #ff5722;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .earn-more:hover {
+            background: #e64a19;
+        }
+    </style>
+    <script src="db.js"></script>
+    <script src="timetracks.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="card blue">
+            <h2>Completed Tasks</h2>
+            <p class="count">120</p>
+        </div>
+        <div class="card green">
+            <h2>Pending Tasks</h2>
+            <p class="count">5</p>
+        </div>
+        <div class="card orange">
+            <h2>Total Points</h2>
+            <div id="displayPoints"></div>
+        </div>
+        <div class="card yellow">
+            <h2>Pending Tasks</h2>
+            <p class="count">5</p>
+        </div>
+        <div class="card lightblue">
+            <h2>1$ = 10000 points</h2>
+        </div>
+        <div class="card lightseagreen">
+            <h2>2$ = 18000 points</h2>
+        </div>
+        <div class="card lightslategray">
+            <h2>3$ = 29000 points</h2>
+        </div>
+        <div class="card blue">
+            <h2> <div id="timeTracker">⏳ Time Spent: 0s</div>
+            <div id="pointsTracker">💰 Points: $0.00</div>  </h2>
+           <h2> Earn upto 10$</h2>
+        </div>
+
+    
+    </div>
+    <button class="earn-more" onclick="window.location.href='earn.html';">Earn More</button>
+    
+
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Endless Runner - Truck Edition</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="/db.js"></script>
+</head>
+<body style="margin: 0; overflow: hidden;">
+    <div id="displayPoints">
+    Points: 0
+</div>
+
+    <script>
+        let scene, camera, renderer, player, track, obstacles = [], speed = 0.2, score = 0;
+        const lanes = [-3, 0, 3]; // Three lanes: left, center, right
+
+        function init() {
+
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // Lighting
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(5, 10, 5);
+            scene.add(light);
+
+            // Background elements
+            const sky = new THREE.Mesh(new THREE.SphereGeometry(50, 32, 32), new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }));
+            scene.add(sky);
+
+            const sun = new THREE.Mesh(new THREE.SphereGeometry(2, 32, 32), new THREE.MeshBasicMaterial({ color: 0xFFFF00 }));
+            sun.position.set(-10, 15, -30);
+            scene.add(sun);
+
+          
+            // Road (realistic track)
+            const trackGeometry = new THREE.BoxGeometry(10, 0.5, 100);
+            const trackMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
+            track = new THREE.Mesh(trackGeometry, trackMaterial);
+            track.position.set(0, -0.75, 0);
+            scene.add(track);
+
+            // Player (Human Model)
+            const playerGeometry = new THREE.CylinderGeometry(0.5, 0.5, 2, 8);
+            const playerMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+            player = new THREE.Mesh(playerGeometry, playerMaterial);
+            player.position.set(0, 1, 10);
+            scene.add(player);
+
+            camera.position.z = 20;
+            camera.position.y = 5;
+            camera.lookAt(player.position);
+
+            document.addEventListener("keydown", movePlayer);
+            document.addEventListener("touchstart", handleTouchStart, false);
+            document.addEventListener("touchmove", handleTouchMove, false);
+
+            
+            generateObstacles();
+            animate();
+            setInterval(startGameIntervals,10000);
+
+               // Add points every 5 seconds
+
+        }
+        function startGameIntervals() {
+         
+    setInterval(increaseSpeed, 5000); // Increases speed every 3 seconds
+    addPoints(1, updateDisplay);
+    
+}
+
+        let xDown = null;
+        let yDown = null;
+
+        function handleTouchStart(evt) {
+            xDown = evt.touches[0].clientX;
+            yDown = evt.touches[0].clientY;
+        }
+
+        function handleTouchMove(evt) {
+            if (!xDown || !yDown) return;
+
+            let xUp = evt.touches[0].clientX;
+            let yUp = evt.touches[0].clientY;
+
+            let xDiff = xDown - xUp;
+            let yDiff = yDown - yUp;
+
+            if (Math.abs(xDiff) > Math.abs(yDiff)) {
+                if (xDiff > 0) {
+                    if (player.position.x > -3) player.position.x -= 3; // Swipe Left
+                } else {
+                    if (player.position.x < 3) player.position.x += 3; // Swipe Right
+                }
+            } else {
+                if (yDiff < 0) {
+                    // Swipe Down (not used)
+                } else {
+                    jump(); // Swipe Up for Jump
+                }
+            }
+
+            xDown = null;
+            yDown = null;
+        }
+
+        function movePlayer(event) {
+            if (event.key === "ArrowLeft" && player.position.x > -3) {
+                player.position.x -= 3;
+            }
+            if (event.key === "ArrowRight" && player.position.x < 3) {
+                player.position.x += 3;
+            }
+            if (event.key === "ArrowUp") {
+                jump();
+            }
+        }
+
+        function jump() {
+
+            let jumpHeight = 105, jumpSpeed = 0.1, isJumping = true;
+            let jumpInterval = setInterval(() => {
+                if (isJumping) {
+                    player.position.y += jumpSpeed;
+                    if (player.position.y >= 2) isJumping = false;
+                } else {
+                    player.position.y -= jumpSpeed;
+                    if (player.position.y <= 1) {
+                        clearInterval(jumpInterval);
+                        player.position.y = 1;
+                    }
+                }
+            }, 20);
+        }
+
+        function generateObstacles() {
+            setInterval(() => {
+                const obstacleGeometry = new THREE.BoxGeometry(2, 2, 5);
+                const obstacleMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff });
+                const obstacle = new THREE.Mesh(obstacleGeometry, obstacleMaterial);
+                obstacle.position.set(lanes[Math.floor(Math.random() * lanes.length)], 1, -30);
+                scene.add(obstacle);
+                obstacles.push(obstacle);
+            }, 1000);
+        }
+
+        function increaseSpeed() {
+
+            speed += 0.05;
+            console.log("Speed increased to:", speed);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            obstacles.forEach(obstacle => {
+                obstacle.position.z += speed;
+                if (obstacle.position.z > 20) {
+                    scene.remove(obstacle);
+                    obstacles.shift();
+                    score += 3;
+                    console.log("Score:", score);
+                }
+                // Collision Detection
+                if (
+    Math.abs(player.position.x - obstacle.position.x) < 1.5 &&
+    Math.abs(player.position.z - obstacle.position.z) < 2
+) {
+    // Create a game over message
+    const gameOverMessage = document.createElement("div");
+    gameOverMessage.innerHTML = `Game Over! <br> Score: ${score} <br> Play at least 5 minutes++ & get paid`;
+    gameOverMessage.style.position = "absolute";
+    gameOverMessage.style.top = "50%";
+    gameOverMessage.style.left = "50%";
+    gameOverMessage.style.transform = "translate(-50%, -50%)";
+    gameOverMessage.style.background = "rgba(0, 0, 0, 0.8)";
+    gameOverMessage.style.color = "#fff";
+    gameOverMessage.style.padding = "20px";
+    gameOverMessage.style.fontSize = "20px";
+    gameOverMessage.style.borderRadius = "10px";
+    gameOverMessage.style.textAlign = "center";
+    document.body.appendChild(gameOverMessage);
+
+    // Auto-reload after 3 seconds
+    setTimeout(() => {
+        location.reload();
+    }, 3000);
+}
+
+            });
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener("resize", () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+        init();
+    </script>
+    <script>document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          // Create a game over message
+    const gameOverMessage = document.createElement("div");
+    gameOverMessage.innerHTML = `Game Over! <br> Score: ${score} <br> Play at least 5 minutes++ & get paid`;
+    gameOverMessage.style.position = "absolute";
+    gameOverMessage.style.top = "50%";
+    gameOverMessage.style.left = "50%";
+    gameOverMessage.style.transform = "translate(-50%, -50%)";
+    gameOverMessage.style.background = "rgba(0, 0, 0, 0.8)";
+    gameOverMessage.style.color = "#fff";
+    gameOverMessage.style.padding = "20px";
+    gameOverMessage.style.fontSize = "20px";
+    gameOverMessage.style.borderRadius = "10px";
+    gameOverMessage.style.textAlign = "center";
+    document.body.appendChild(gameOverMessage);
+
+    // Auto-reload after 3 seconds
+    setTimeout(() => {
+        location.reload();
+    }, 3000);
+        }
+    });
+
+
+
+  
+
+    
+
+    let isPaused = false; // Flag for pausing
+
+// Function to toggle pause state
+function togglePause() {
+    isPaused = !isPaused;
+    pauseButton.innerText = isPaused ? "Resume" : "Pause";
+    if (!isPaused) {
+        animate(); // Resume animation
+    }
+}
+
+// Create Pause/Resume Buttons
+const controlsContainer = document.createElement("div");
+controlsContainer.style.position = "absolute";
+controlsContainer.style.top = "10px";
+controlsContainer.style.left = "50%";
+controlsContainer.style.transform = "translateX(-50%)";
+controlsContainer.style.display = "flex";
+controlsContainer.style.gap = "10px";
+controlsContainer.style.zIndex = "1000"; // Ensure buttons appear above the game
+
+const pauseButton = document.createElement("button");
+pauseButton.innerText = "Pause";
+pauseButton.style.padding = "10px 20px";
+pauseButton.style.fontSize = "16px";
+pauseButton.style.cursor = "pointer";
+pauseButton.style.border = "none";
+pauseButton.style.borderRadius = "5px";
+pauseButton.style.background = "#ffcc00";
+pauseButton.style.color = "#000";
+pauseButton.style.fontWeight = "bold";
+
+pauseButton.addEventListener("click", togglePause);
+
+controlsContainer.appendChild(pauseButton);
+document.body.appendChild(controlsContainer);
+
+// Modify animate function to check isPaused
+function animate() {
+    if (isPaused) return; // Stop rendering if paused
+    requestAnimationFrame(animate);
+
+    obstacles.forEach(obstacle => {
+        obstacle.position.z += speed;
+        if (obstacle.position.z > 20) {
+            scene.remove(obstacle);
+            obstacles.shift();
+            score += 3;
+        }
+
+        if (
+            Math.abs(player.position.x - obstacle.position.x) < 1.5 &&
+            Math.abs(player.position.z - obstacle.position.z) < 2
+        ) {
+            gameOver();
+        }
+    });
+
+    renderer.render(scene, camera);
+}
+
+// Function to handle game over
+function gameOver() {
+    isPaused = true;
+    pauseButton.disabled = true; // Disable pause button on game over
+
+    const gameOverMessage = document.createElement("div");
+    gameOverMessage.innerHTML = `Game Over! <br> Score: ${score} <br> Play at least 5 minutes++ & get paid`;
+    gameOverMessage.style.position = "absolute";
+    gameOverMessage.style.top = "50%";
+    gameOverMessage.style.left = "50%";
+    gameOverMessage.style.transform = "translate(-50%, -50%)";
+    gameOverMessage.style.background = "rgba(0, 0, 0, 0.8)";
+    gameOverMessage.style.color = "#fff";
+    gameOverMessage.style.padding = "20px";
+    gameOverMessage.style.fontSize = "20px";
+    gameOverMessage.style.borderRadius = "10px";
+    gameOverMessage.style.textAlign = "center";
+    document.body.appendChild(gameOverMessage);
+
+    setTimeout(() => {
+        location.reload();
+    }, 3000);
+}
+
+// Listen for "P" key to pause/resume the game
+document.addEventListener("keydown", (event) => {
+    if (event.key === "p" || event.key === "P") {
+        togglePause();
+    }
+});
+
+
+/*load ads*/
+let adShown = false; // Flag to track if ad was shown
+
+// Function to show rewarded ad
+function showRewardedAd(callback) {
+    if (typeof window.adsbygoogle !== "undefined") {
+        // Create a rewarded ad element dynamically
+        let adContainer = document.createElement("div");
+        adContainer.innerHTML = `
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-slot="YYYYYYYYYY"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+        `;
+        document.body.appendChild(adContainer);
+        
+        (adsbygoogle = window.adsbygoogle || []).push({});
+
+        // Simulate ad completion after 5 seconds
+        setTimeout(() => {
+            document.body.removeChild(adContainer);
+            adShown = true; // Mark ad as shown
+            callback(); // Resume game after ad
+        }, 5000);
+    } else {
+        console.log("AdMob not loaded");
+        callback(); // Resume game if ads fail
+    }
+}
+
+// Function to toggle pause/resume
+function togglePause() {
+    if (!isPaused) {
+        // If game is running, pause and show ad
+        isPaused = true;
+        pauseButton.innerText = "Resume";
+        showRewardedAd(() => {
+            // Ad finished, keep game paused until user resumes manually
+        });
+    } else {
+        // Resume game
+        isPaused = false;
+        pauseButton.innerText = "Pause";
+        animate();
+    }
+}
+
+    </script>
+
+  <script>
+    
+    
+
+    
+   
+    </script>
+</body>
+</html>

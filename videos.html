@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Ads Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #3498db, #8e44ad); /* Attractive body background gradient */
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Glassy Watch Video Button */
+        .watch-btn {
+            background: linear-gradient(135deg, #3498db, black); /* Attractive body background gradient */
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px 30px;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .watch-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Responsive Iframe */
+        .iframe-container {
+            width: 100%;
+            max-width: 1000px;
+            height: 400px; /* Default for desktop */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+
+        /* Third-party Ad Space */
+        .ad-space {
+            width: 100%;
+            max-width: 800px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+        }
+            /*ads*/
+            #status{
+            margin-top: 1%;
+            color: orange;
+            font-weight: bold;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .iframe-container {
+                height: 250px; /* Smaller height for mobile */
+            }
+            .watch-btn {
+                font-size: 16px;
+                padding: 12px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Glassy Watch Videos Button -->
+    <button class="watch-btn" id="watch" onclick="openRewardedAds()">Rewarded Video</button>
+    <p id="status"></p>
+        <p>Your Points: <span id="userPoints">0</span></p>
+    <div class="ad-space">
+        ▶️
+        We are searching videos for you. Watch the whole video to earn points.
+    </div>
+    <!-- Responsive Rewarded Ads Iframe -->
+    
+
+    <!-- Third-Party Ad Placement -->
+    <div class="ad-space">
+        Your Ad Here (Third-Party Ad Placement)
+    </div>
+</div>
+
+
+<script>
+
+    let db;
+        let userPoints = 0;
+        let adNetwork = ""; // Auto-detect ad network
+    
+        function openDB() {
+            let request = indexedDB.open("SpinRewardDB", 1);
+    
+            request.onupgradeneeded = function(event) {
+                let db = event.target.result;
+                if (!db.objectStoreNames.contains("userData")) {
+                    db.createObjectStore("userData", { keyPath: "id" });
+                }
+            };
+    
+            request.onsuccess = function(event) {
+                db = event.target.result;
+                loadUserPoints();
+            };
+    
+            request.onerror = function(event) {
+                console.log("IndexedDB error:", event.target.error);
+            };
+        }
+    
+        function loadUserPoints() {
+            let transaction = db.transaction(["userData"], "readonly");
+            let store = transaction.objectStore("userData");
+            let request = store.get("userPoints");
+    
+            request.onsuccess = function() {
+                if (request.result) {
+                    userPoints = request.result.points;
+                    document.getElementById("userPoints").innerText = userPoints;
+                }
+            };
+        }
+    
+        function saveUserPoints() {
+            let transaction = db.transaction(["userData"], "readwrite");
+            let store = transaction.objectStore("userData");
+            store.put({ id: "userPoints", points: userPoints });
+        }
+    
+        document.getElementById("watch").addEventListener("click", function() {
+            document.getElementById("status").innerText = "Searching...";
+    
+            setTimeout(() => {
+                document.getElementById("status").innerText = "wait...";
+                
+                setTimeout(() => {
+                    showRewardedAd();
+                }, 2000);
+    
+            }, 2000);
+        });
+    
+        function detectAdNetwork() {
+            if (typeof google !== "undefined" && google.adsense) {
+                adNetwork = "AdSense";
+            } else if (typeof PBJS !== "undefined") {
+                adNetwork = "PropellerAds";
+            } else if (typeof unityAds !== "undefined") {
+                adNetwork = "UnityAds";
+            }
+        }
+    
+        function showRewardedAd() {
+            detectAdNetwork();
+    
+            if (adNetwork === "AdSense") {
+                document.getElementById("status").innerText = "Loading Google AdSense Ad...";
+                google.adsense.rewarded.onAdComplete = function() {
+                    giveReward();
+                };
+                google.adsense.rewarded.requestAd();
+            } 
+            else if (adNetwork === "PropellerAds") {
+                document.getElementById("status").innerText = "Loading PropellerAds Ad...";
+                PBJS.que.push(function() {
+                    PBJS.loadRewardedAd({
+                        onAdLoaded: function() {
+                            document.getElementById("status").innerText = "Ad Loaded. Watching now...";
+                            PBJS.showRewardedAd({
+                                onComplete: function() {
+                                    giveReward();
+                                },
+                                onError: function() {
+                                    document.getElementById("status").innerText = "Ad failed to load. Try again later.";
+                                }
+                            });
+                        },
+                        onError: function() {
+                            document.getElementById("status").innerText = "No ads available. Come back later.";
+                        }
+                    });
+                });
+            } 
+            else if (adNetwork === "UnityAds") {
+                document.getElementById("status").innerText = "Loading Unity Ads...";
+                unityAds.showRewardedAd({
+                    onComplete: function() {
+                        giveReward();
+                    },
+                    onError: function() {
+                        document.getElementById("status").innerText = "Ad failed to load.";
+                    }
+                });
+            } 
+            else {
+                document.getElementById("status").innerText = "No ads available right now. Try again later.";
+            }
+        }
+    
+        function giveReward() {
+            userPoints += 10;
+            document.getElementById("userPoints").innerText = userPoints;
+            saveUserPoints();
+            document.getElementById("status").innerText = "You earned 10 points!";
+        }
+    
+        openDB();
+    
+    
+    
+    </script>
+   <!-- Ad Network Scripts -->
+   <script src="https://proads-code.com/rewarded-ad.js"></script>
+   <script src="https://ads.google.com/adsense/rewarded.js"></script>
+   <script src="https://unityads.com/sdk.js"></script>
+
+</body>
+</html>
