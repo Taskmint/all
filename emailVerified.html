@@ -53,7 +53,6 @@
         import { getAuth, applyActionCode } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
         // Firebase Configuration
-        // Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyCpoMclgXGuDxb1muQ-4eP-_MB3ZdRd4DE",
             authDomain: "taskmint-237c0.firebaseapp.com",
@@ -64,23 +63,23 @@
             measurementId: "G-880TPF7J3L"
         };
 
-
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // Function to Verify Email
+        // Auto-Detect Email Verification Code
         function verifyEmail() {
             const urlParams = new URLSearchParams(window.location.search);
             const oobCode = urlParams.get("oobCode");
+            const mode = urlParams.get("mode");
             const messageElement = document.getElementById("message");
 
-            if (oobCode) {
+            if (mode === "verifyEmail" && oobCode) {
                 applyActionCode(auth, oobCode)
                     .then(() => {
                         messageElement.textContent = "✅ Email successfully verified!";
                         setTimeout(() => {
-                            window.location.href = "https://taskmint.github.io/all/earn.html"; // Redirect after verification
+                            window.location.href = "https://taskmint.github.io/all/earn.html"; // Redirect after success
                         }, 3000);
                     })
                     .catch((error) => {
@@ -91,7 +90,7 @@
             }
         }
 
-        // Call verifyEmail when page loads
+        // Run Verification When Page Loads
         window.onload = verifyEmail;
     </script>
 
